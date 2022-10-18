@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script>
+        function myFunction(){
+            //30 days text (h2) css decoration
+            document.getElementById('30Days').style.cssText = `
+                                                              text-align: center;
+                                                              text-decoration: underline;
+                                                              font :16px Arial;
+                                                              margin-bottom : 10px`
+                                                              
+            //selecting li & span elements
+            let li = document.querySelectorAll('ul > li');
+            let span = document.querySelectorAll('ul > li > span');
+            document.querySelector('ul').style.cssText = `display: table;
+                                                          margin: 0 auto;`
+
+            //common li decoration                                              
+            let liCommonDecoration = `border: .5px;
+                                      max-width: 100%; 
+                                      margin : 2px;
+                                      list-style-type: none;
+                                      padding : 13px 200px 13px 40px;
+                                      font : 12px Arial, sans-serif`
+
+            //looping through each element of li, check span id if equal required criteria
+            for(let i = 0 ; i < li.length; i++){
+
+              if(span[i] == done)
+                li[i].style.cssText = `background-color : #43a543;
+                                      ${liCommonDecoration}`//green
+              else if(span[i] == Ongoing)  
+                li[i].style.cssText = `background-color : #eded10;
+                                      ${liCommonDecoration}`//yellow
+              else 
+                li[i].style.cssText = `background-color : #e95600;
+                                      ${liCommonDecoration}` //kinda red
+            }
+
+          //setting interval for 2020 and dateFun for each second, random color  
+          setInterval(function intervalFun(){
+            //random color for each interval
+            let randomColor = "#" + Math.floor(Math.random()*16777215).toString(16);
+            let randomBackgroundColor = "#" + Math.floor(Math.random()*16777215).toString(16);
+
+            const h1Title = document.getElementById('first-title'); 
+            document.getElementById('2020').style.cssText =
+                                     `font :50px Arial, sans-serif;
+                                      font-weight: 800;
+                                      color : ${randomColor}`;
+            h1Title.style.cssText = `text-align: center;
+                                     font :bold 19px Arial, sans-serif`
+        
+            const time = document.getElementById("nowTime");
+            time.innerHTML = datefun();
+            time.style.cssText = `padding: 5px 2px;
+                                  display: table;
+                                  margin: 3px auto;
+                                  text-align : center;
+                                  font :bold 15px bolder Arial, sans-serif;
+                                  background-color : ${randomBackgroundColor};`                         
+           }, 1000)
+
+          //declaring date function to work with date element
+          function datefun(){
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+                                "July", "August", "September", "October", "November", "December"];
+            const now = new Date();
+            let year = now.getFullYear();
+            let month = now.getMonth();
+            let day = now.getDay();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
+            if(hours < 10)
+              hours = '0' + hours;
+            if(minutes < 10)
+              minutes = '0' + minutes;    
+
+            return monthNames[month] + " " + day + "," + year + " " + hours + ":" + minutes + ":" + seconds;
+          }
+
+
+    }
+    </script>
+  </head>
+  <body onload="myFunction()">
+    <h1 class="title" id="first-title">Asabeneh Yetayeh challenges in <span id="2020">2020<span></h1>
+    <h2 id="30Days" >30DaysOfJavaScript Challenge</h2>
+    <span id="nowTime"></span>
+    <p></p>
+    <ul>
+      <li><span id="done">30DaysOfJavaScript Challenge Done</span></li>  
+      <li><span id="Ongoing">30DaysOfJavaScript Challenge Ongoing</span></li>
+      <li><span id="Coming">30DaysOfReact Challenge Coming</span></li>
+      <li><span id="Coming">30DaysOfFullStack Challenge Coming</span></li>
+      <li><span id="Coming">30DaysOfDataAnalysis Challenge Coming</span></li>
+      <li><span id="Coming">30DaysOfReactNative Challenge Coming</span></li>
+      <li><span id="Coming">30DaysOfMachineLearning Challenge Coming</span></li>
+  </ul>
+
+  </body>
+</html>
