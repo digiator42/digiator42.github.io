@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+
+        let h1 = document.createElement("h1");
+        let h2 = document.createElement("h2");
+        h1.innerHTML = "Number Generator";
+        h2.innerHTML = "30DaysOfJavaScript:DOM Day 3";
+
+        h1.style.cssText = `text-align : center;
+                                            font: bolder 30px Arial, sans-serif`;
+        h2.style.cssText = `text-align : center;
+                                            font: bolder 15px Arial, sans-serif;
+                                            margin : -10px;
+                                            text-decoration: underline;`;
+
+      document.body.appendChild(h1);
+      document.body.appendChild(h2);
+
+      const button = document.createElement('button');
+      button.textContent = "Generate Numbers";
+      const input = document.createElement('input');
+      input.placeholder = "Generate more numbers...";
+      const paraError = document.createElement('p');
+
+      button.style.cssText = `margin-left: 4px;
+                              padding : 10px 10px;
+                              background: #00c300;
+                              color: white;
+                              font: bold 13px Arial, sans-serif;
+      
+                              `;
+      
+      // input.addEventListener("focus", () => "border: 3px solid red");
+                        
+      input.style.cssText = `margin-left: 25%;
+                              padding : 10px;
+                              width: 400px;
+                              text-align: left;
+                              `;
+      paraError.style.cssText = `margin-left: 25%;;
+                                 margin-top: 40px;
+                                 font: 12px Arial, sans-serif;
+                                 color: red;
+                                 margin-bottom: 5px;
+                                  `;
+
+      document.body.appendChild(paraError);
+      document.body.appendChild(input);
+      document.body.appendChild(button);
+      let inputValue;
+
+  
+
+      button.addEventListener('click', () => {
+          inputValue = document.querySelector('input').value;
+
+          if(inputValue == '' || inputValue == null || inputValue <= 0)
+            paraError.innerHTML = "Invalid input / must be a number bigger than 0";
+          else if (isNaN(inputValue))
+            paraError.innerHTML = "Input value must be a number"; 
+
+          else{
+          const div = document.querySelector('div');
+          const h1 = document.querySelector('h1');
+          const h2 = document.querySelector('h2');
+            
+          if(div && inputValue > 0){
+                document.body.removeChild(div);
+                paraError.innerHTML = '';
+                paraError.innerHTML = '';
+                generateNumbers();
+              }
+          else{
+              paraError.innerHTML = "";
+              paraError.innerHTML = "";
+              generateNumbers();
+          }
+        }
+    })
+
+      function generateNumbers() {
+        
+        let div = document.createElement("div");
+        div.style.cssText =
+          "flex-flow:row wrap; display: flex; margin: 3% auto; width:864px;";
+
+        
+
+        let style = `padding :0px 11px;
+                                    color : white;
+                                    width : 70px;
+                                    font: bolder 35px Arial, sans-serif;
+                                    border : 1px;
+                                    margin : 2px 2px;
+                                    text-align : center`;
+        div.className = 'numbersContainer';
+        document.body.appendChild(div);
+
+        function isPrime(num) {
+          for (let i = 2, s = Math.sqrt(num); i <= s; i++)
+            if (num % i === 0) return 0;
+          return num > 1;
+        }
+
+        for (let i = 0; i <= inputValue; i++) {
+          let span = document.createElement("span");
+          span.innerHTML = i;
+
+          if (i % 2 === 0) {
+            span.style.cssText = `background-color : green;
+                                                    ${style}`;
+          } else if (isPrime(i)) {
+            span.style.cssText = `background-color : red;
+                                                    ${style}`;
+          } else
+            span.style.cssText = `background-color : #edc207cc;
+                                                    ${style}`;
+
+          div.appendChild(span);
+        }
+      }
+    </script>
+
+  </body>
+</html>
