@@ -71,8 +71,8 @@
       button.addEventListener('click', () => {
           inputValue = document.querySelector('input').value;
 
-          if(inputValue == '' || inputValue == null || inputValue <= 0)
-            paraError.innerHTML = "Invalid input / must be a number bigger than 0";
+          if(inputValue == '' || inputValue == null || inputValue < 0)
+            paraError.innerHTML = "Invalid input / must be a positive number";
           else if (isNaN(inputValue))
             paraError.innerHTML = "Input value must be a number"; 
 
@@ -81,7 +81,7 @@
           const h1 = document.querySelector('h1');
           const h2 = document.querySelector('h2');
             
-          if(div && inputValue > 0){
+          if(div && inputValue >= 0){
                 document.body.removeChild(div);
                 paraError.innerHTML = '';
                 paraError.innerHTML = '';
