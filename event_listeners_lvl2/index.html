@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const h1 = document.createElement("h1");
+      h1.innerHTML = "Press any keyboard key";
+      h1.style.cssText = `display: table;
+                            margin: 10% auto;
+                            border : 1px solid lightGray;
+                            border-radius: 4px;
+                            max-width: 400px;
+                            color: #585858;
+                            font: bolder 30px Helvetica Neue;
+                            padding:20px 40px;
+                            text-align: center;
+                            box-shadow: lightgrey 1px 4px 9px 4px;`;
+
+      const keySpan = document.createElement("span");
+      keySpan.style.cssText = `color : green;
+                                font: bolder 35px Helvetica Neue;`;
+      keySpan.innerHTML = "";
+
+      document.body.appendChild(h1);
+
+      const h2 = document.createElement("h2");
+      h2.innerHTML = "";
+      h2.style.cssText = `display: table;
+                            margin: -8% auto;
+                            border : 1px solid lightGray;
+                            border-radius: 4px;
+                            max-width: 400px;
+                            color: green;
+                            font: bolder 70px Helvetica Neue;
+                            padding:40px 20px;
+                            text-align: center;
+                            box-shadow: lightgrey 1px 4px 9px 4px;`;
+
+      addEventListener("keydown", (e) => {
+        let pressedKey = e.key;
+        console.log(pressedKey);
+        keySpan.innerHTML = pressedKey;
+        h1.innerHTML = "You pressed ";
+        h1.appendChild(keySpan);
+        document.body.appendChild(h2);
+        h2.innerHTML = e.keyCode;
+      });
+    </script>
+  </body>
+</html>
