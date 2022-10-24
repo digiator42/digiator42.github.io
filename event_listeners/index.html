@@ -5,6 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <style>
+      .input:focus{
+        outline: none !important;
+        border: 1px solid #07bf07;
+      }
+    </style>
   </head>
   <body>
     <script>
@@ -28,24 +34,27 @@
       button.textContent = "Generate Numbers";
       const input = document.createElement('input');
       input.placeholder = "Generate more numbers...";
+      input.className = "input";
       const paraError = document.createElement('p');
 
-      button.style.cssText = `margin-left: 4px;
-                              padding : 10px 10px;
-                              background: #00c300;
+      button.style.cssText = `margin-left: 10px;
+                              padding: 8px 6px;
+                              background: #3f993f;
                               color: white;
-                              font: bold 13px Arial, sans-serif;
-      
+                              font: bolder 18px Arial, sans-serif;
+                              border-width: 0px;
+                              margin-right: 0px;
                               `;
       
       // input.addEventListener("focus", () => "border: 3px solid red");
                         
-      input.style.cssText = `margin-left: 25%;
+      input.style.cssText = `margin-left: 30%;
                               padding : 10px;
                               width: 400px;
+                              height: 16px;
                               text-align: left;
                               `;
-      paraError.style.cssText = `margin-left: 25%;;
+      paraError.style.cssText = `margin-left: 30.1%;;
                                  margin-top: 40px;
                                  font: 12px Arial, sans-serif;
                                  color: red;
