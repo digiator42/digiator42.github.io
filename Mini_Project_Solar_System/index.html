@@ -9,7 +9,7 @@
       }
       #image{
         display: table;
-        margin: 0 auto;
+        margin: 15px auto 0 auto;
         width: 350px;
       }
       h1 {
@@ -123,7 +123,7 @@
         if(isNaN(input.value) || input.value <= 0){
           result_container.innerHTML = "Enter a positive number only";
           result_container.style.cssText = `display: table;
-                                            margin : 10% auto;
+                                            margin : 10px auto 25px;
                                             text-align: center;
                                             box-shadow: 0px 0px 5px 0px #ccccccbd;
                                             padding : 30px 10px;
@@ -136,7 +136,7 @@
                                           width: 40%;
                                           box-shadow: 0px 0px 5px 0px #ccccccbd;
                                           margin-right: 9%;
-                                          margin-top: 10%;
+                                          margin-top: 100px;
                                           `;
         result_circle.style.cssText =  `display: table;
                                         margin: 10% auto 5%;
@@ -148,7 +148,7 @@
                                         text-align: center;
                                         font-weight: bold;`;
 
-        image.style.cssText = `display : inline; width: 350px;`;
+        image.style.cssText = `display : inline; height:350px; margin: 15px auto 15px auto`;
         image.src = `${selected_planet}.png`;                                  
 
         let weight = (input.value * selected_planet_value).toFixed(2);
