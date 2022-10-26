@@ -3,18 +3,14 @@
   <head>
     <style>
       * {
-        background-image: url("https://64.media.tumblr.com/d823abd644fa478fb244bd5a96e4ed12/tumblr_obfjz6Bd9f1runoqyo1_540.gifv");
+        background-image: url("background.gifv");
         color: white;
         /* background-size: cover; */
       }
       #image{
+        display: table;
+        margin: 0 auto;
         width: 350px;
-      }
-      #container-upper > p {
-        display: block;
-        margin: 40px 0px 0px 7px;
-        font: 16px arial, sans-serif;
-        color: red;
       }
       h1 {
         display: table;
@@ -30,7 +26,7 @@
         background-color: #000000f0;
         padding: 10px 20px;
         margin-left: 5px;
-    }
+      }
       button {
         border: none;
         box-shadow: 1px 1px 3px 0.5px #ccc;
@@ -41,7 +37,7 @@
       }
       #container-upper {
         display: table;
-        margin: -10px auto 0 auto;
+        margin: 40px auto 0 auto;
       }
       #container-layout {
         display: inline-block;
@@ -51,27 +47,10 @@
         margin-left: 20%;
         width: 60%;
       }
-      #container-result {
-        float: right;
-        width: 40%;
-        box-shadow: 0px 0px 5px 0px #ccccccbd;
-        margin-right: 9%;
-        margin-top: 10%;
-      }
       #result-text {
         text-align: center;
       }
-      #result-circle {
-        display: table;
-        margin: 10% auto 5%;
-        width: 100px;
-        font: 40px;
-        border-radius: 50px;
-        box-shadow: 0px 0px 5px 0px #ccccccbd;
-        padding: 40px 0px;
-        text-align: center;
-        font-variant: small-caps;
-      }
+
     </style>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -81,7 +60,6 @@
   <body>
     <h1>Calculate a weight of an object on a planet</h1>
     <div id="container-upper">
-      <p></p>
       <input type="text" placeholder="Mass in Kilogram" />
       <select
         name="planets-list"
@@ -127,12 +105,13 @@
       };
 
       const s_index = Object.keys(planet_gravity_data);
-      let input_Error = document.querySelector('p');
       const button = document.getElementById('btn');
       let div_div_p = document.querySelector('div > div > p');
       let div_div_div = document.querySelector('div > div > div');
 
       let result_container = document.getElementById("container-result");
+      let result_circle = document.getElementById("result-circle");
+      let image = document.querySelector("img");
 
 
       button.addEventListener('click', (e) => {
@@ -142,13 +121,41 @@
         let selected_planet_value = planet_gravity_data[s_index[selected.selectedIndex]];
 
         if(isNaN(input.value) || input.value <= 0){
-          input_Error.innerHTML = "Enter a positive number only";
+          result_container.innerHTML = "Enter a positive number only";
+          result_container.style.cssText = `display: table;
+                                            margin : 10% auto;
+                                            text-align: center;
+                                            box-shadow: 0px 0px 5px 0px #ccccccbd;
+                                            padding : 30px 10px;
+                                            `;
+          image.src = "";
         }
         else{
-        let weight = input.value * selected_planet_value;
+        result_container.innerHTML = "";
+        result_container.style.cssText = `float: right;
+                                          width: 40%;
+                                          box-shadow: 0px 0px 5px 0px #ccccccbd;
+                                          margin-right: 9%;
+                                          margin-top: 10%;
+                                          `;
+        result_circle.style.cssText =  `display: table;
+                                        margin: 10% auto 5%;
+                                        width: 100px;
+                                        font: 20px solid;
+                                        padding: 40px 0px;
+                                        border-radius: 50px;
+                                        box-shadow: 0px 0px 5px 0px #ccccccbd;
+                                        text-align: center;
+                                        font-weight: bold;`;
+
+        image.style.cssText = `display : inline; width: 350px;`;
+        image.src = `https://digiator42.github.io/Mini_Project_Solar_System/${selected_planet}.png`;                                  
+
+        let weight = (input.value * selected_planet_value).toFixed(2);
         div_div_p.innerHTML = `The weight of the object on ${selected_planet}`;
         div_div_div.innerHTML = weight;
-        input_Error.innerHTML = "";
+        result_container.appendChild(div_div_p);
+        result_container.appendChild(div_div_div);
         }
       })
 
