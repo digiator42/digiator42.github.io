@@ -1,41 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <style>
+      * {
+        background-image: url("https://64.media.tumblr.com/d823abd644fa478fb244bd5a96e4ed12/tumblr_obfjz6Bd9f1runoqyo1_540.gifv");
+        color: white;
+        /* background-size: cover; */
+      }
+      #image{
+        width: 350px;
+      }
+      #container-upper > p {
+        display: block;
+        margin: 40px 0px 0px 7px;
+        font: 16px arial, sans-serif;
+        color: red;
+      }
+      h1 {
+        display: table;
+        margin: 0 auto;
+        font: 30px;
+      }
+      input{
+        padding: 10px 20px;
+        margin-left: 5px;
+      }
+      select{
+        border: 1px thin #fff;
+        background-color: #000000f0;
+        padding: 10px 20px;
+        margin-left: 5px;
+    }
+      button {
+        border: none;
+        box-shadow: 1px 1px 3px 0.5px #ccc;
+        padding: 11px;
+        text-decoration: none;
+        margin: 0px 5px;
+        cursor: pointer;
+      }
+      #container-upper {
+        display: table;
+        margin: -10px auto 0 auto;
+      }
+      #container-layout {
+        display: inline-block;
+        border: none;
+        box-shadow: 0px 0px 5px 0px #ccccccbd;
+        margin-top: 5%;
+        margin-left: 20%;
+        width: 60%;
+      }
+      #container-result {
+        float: right;
+        width: 40%;
+        box-shadow: 0px 0px 5px 0px #ccccccbd;
+        margin-right: 9%;
+        margin-top: 10%;
+      }
+      #result-text {
+        text-align: center;
+      }
+      #result-circle {
+        display: table;
+        margin: 10% auto 5%;
+        width: 100px;
+        font: 40px;
+        border-radius: 50px;
+        box-shadow: 0px 0px 5px 0px #ccccccbd;
+        padding: 40px 0px;
+        text-align: center;
+        font-variant: small-caps;
+      }
+    </style>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    <script>
-        const planet_gravity_data = {
-            Mercury	: 0.38,
-            Venus	: 0.91,
-            Earth	: 1,
-            Moon	: 0.166,
-            Mars	: 0.38,
-            Jupiter	: 2.34,
-            Saturn	: 1.06,
-            Uranus	: 0.92,
-            Neptune	: 1.19,
-            Pluto	: 0.06,
-        }
+  </head>
+  <body>
+    <h1>Calculate a weight of an object on a planet</h1>
+    <div id="container-upper">
+      <p></p>
+      <input type="text" placeholder="Mass in Kilogram" />
+      <select
+        name="planets-list"
+        id="planets-list"
+        placeholder="select planet.."
+      >
+        <option value="1">Mercury</option>
+        <option value="2">Venus</option>
+        <option value="3">Earth</option>
+        <option value="4">Moon</option>
+        <option value="5">Mars</option>
+        <option value="6">Jupiter</option>
+        <option value="7">Saturn</option>
+        <option value="8">Uranus</option>
+        <option value="9">Neptune</option>
+        <option value="10">Pluto</option>
+      </select>
+      <button type="button" id="btn">Calculate weight</button>
+    </div>
+    <div id="container-layout">
+      <img
+        src="https://digiator42.github.io/Mini_Project_Solar_System/Earth.png"
+        id="image"
+      />
+      <div id="container-result">
+        <p id="result-text"></p>
+        <div id="result-circle"></div>
+      </div>
+    </div>
 
+    <script>
+      const planet_gravity_data = {
+        Mercury: 0.38,
+        Venus: 0.91,
+        Earth: 1,
+        Moon: 0.166,
+        Mars: 0.38,
+        Jupiter: 2.34,
+        Saturn: 1.06,
+        Uranus: 0.92,
+        Neptune: 1.19,
+        Pluto: 0.06,
+      };
+
+      const s_index = Object.keys(planet_gravity_data);
+      let input_Error = document.querySelector('p');
+      const button = document.getElementById('btn');
+      let div_div_p = document.querySelector('div > div > p');
+      let div_div_div = document.querySelector('div > div > div');
+
+      let result_container = document.getElementById("container-result");
+
+
+      button.addEventListener('click', (e) => {
+        let input = document.querySelector('input');
+        let selected = document.querySelector('select');
+        let selected_planet = s_index[selected.selectedIndex]; 
+        let selected_planet_value = planet_gravity_data[s_index[selected.selectedIndex]];
+
+        if(isNaN(input.value) || input.value <= 0){
+          input_Error.innerHTML = "Enter a positive number only";
+        }
+        else{
+        let weight = input.value * selected_planet_value;
+        div_div_p.innerHTML = `The weight of the object on ${selected_planet}`;
+        div_div_div.innerHTML = weight;
+        input_Error.innerHTML = "";
+        }
+      })
 
     </script>
-    <h1>Calculate a weight of an object on a planet</h1>
-    <input type="text" placeholder="Mass in Kilogram">
-    <select name="planets-list" id="planets-list">
-        <option value="">Mercury</option>
-        <option value="">Venus</option>
-        <option value="">Earth</option>
-        <option value="">Moon</option>
-        <option value="">Mars</option>
-        <option value="">Jupiter</option>
-        <option value="">Saturn</option>
-        <option value="">Uranus</option>
-        <option value="">Neptune</option>
-        <option value="">Pluto</option>
-    </select>
-</body>
+  </body>
 </html>
