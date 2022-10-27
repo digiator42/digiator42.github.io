@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #data-container{
+        display: table;
+        margin: 0 auto;
+      }
+      #left-yValues-column{
+        display: inline-block;
+        max-width: 200px;
+        height: 300px;
+      }
+      #left-yValues-column > span{
+        display: table;
+        margin-bottom: 9px;
+        font: 18px solid Arial,sans-serif;
+      }
+      #myChart{
+        max-width: 600px; 
+        height: 300px;
+        display: inline-block;
+      }
+      #right-yValues-column{
+        display: inline-block;
+        max-width: 100px;
+        height: 300px;
+      }
+      #right-yValues-column > span{
+        display: table;
+        margin-bottom: 9px;
+        font: 18px bolder Arial,sans-serif;
+      }
+    </style>
+  </head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+  <body>
+    <div id="buttons-container" style="display: table; margin: 100px auto;">
+      <button id="populaton-btn">Population</button>
+      <button id="languages-btn" style="margin-left: 10px;">Languages</button>
+    </div>
+    <div id="data-container">
+      <div id="left-yValues-column">
+        <span id="left-values-apan"></span>
+        <span id="left-values-apan"></span>
+        <span id="left-values-apan"></span>
+        <span id="left-values-apan"></span>
+        <span id="left-values-apan"></span>
+        <span id="left-values-apan"></span>
+        <span id="left-values-apan"></span>
+        <span id="left-values-apan"></span>
+        <span id="left-values-apan"></span>
+        <span id="left-values-apan"></span>
+      </div>
+      <canvas
+        id="myChart">
+      </canvas>
+      <div id="right-yValues-column">
+        <span id="right-values-apan"></span>
+        <span id="right-values-apan"></span>
+        <span id="right-values-apan"></span>
+        <span id="right-values-apan"></span>
+        <span id="right-values-apan"></span>
+        <span id="right-values-apan"></span>
+        <span id="right-values-apan"></span>
+        <span id="right-values-apan"></span>
+        <span id="right-values-apan"></span>
+        <span id="right-values-apan"></span>
+      </div>
+    </div>
+
+    <script src="./data.js"></script>
+  </body>
+</html>

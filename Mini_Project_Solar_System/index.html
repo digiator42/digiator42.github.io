@@ -5,7 +5,7 @@
       * {
         background-image: url("background.gifv");
         color: white;
-        /* background-size: cover; */
+        background-size: cover;
       }
       #image{
         display: table;
@@ -104,6 +104,7 @@
         Pluto: 0.06,
       };
 
+      const KG_TO_NEWTON = 9.81;
       const s_index = Object.keys(planet_gravity_data);
       const button = document.getElementById('btn');
       let div_div_p = document.querySelector('div > div > p');
@@ -151,9 +152,9 @@
         image.style.cssText = `display : inline; height:350px; margin: 15px auto 15px auto`;
         image.src = `${selected_planet}.png`;                                  
 
-        let weight = (input.value * selected_planet_value).toFixed(2);
+        let weight = (input.value * selected_planet_value * KG_TO_NEWTON).toFixed(2);
         div_div_p.innerHTML = `The weight of the object on ${selected_planet}`;
-        div_div_div.innerHTML = weight;
+        div_div_div.innerHTML = `${weight} N`;
         result_container.appendChild(div_div_p);
         result_container.appendChild(div_div_div);
         }

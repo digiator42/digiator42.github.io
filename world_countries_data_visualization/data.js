@@ -1,4 +1,5 @@
 
+
 const countries_data = [
 	{
 	  name: "Afghanistan",
@@ -1664,7 +1665,7 @@ const countries_data = [
 	  area: 238391,
 	},
 	{
-	  name: "Russian Federation",
+	  name: "Russian",
 	  capital: "Moscow",
 	  languages: ["Russian"],
 	  population: 144104080,
@@ -2158,7 +2159,7 @@ const countries_data = [
 	  area: 242900,
 	},
 	{
-	  name: "United States of America",
+	  name: "USA",
 	  capital: "Washington, D.C.",
 	  languages: ["English"],
 	  population: 329484123,
@@ -2257,122 +2258,194 @@ const countries_data = [
 	  area: 390757,
 	},
   ];
-  
-//   // I didn't know Set that time :)
-//   let mostSpokenLanguages = function (countries, number) {
-// 	let sortedArrayOfStrings = [];
-// 	let j = 0;
-// 	countries.map((element) => element.languages).forEach((element) => {element.forEach((element) => {
-// 		  sortedArrayOfStrings[j] = element.toString().split(",").toString();
-// 		  j++;
-// 		});
-// 	  });
-  
-//   //after getting all languages as array of strings, counted frequencies of each language. stored in map
-//   let map = sortedArrayOfStrings.reduce(function (obj, b) {
-// 	  obj[b] = ++obj[b] || 1;
-// 	  return obj;
-// 	}, {});
-  
-//    //get unique values of arrayStrings to be compared with map // cannot get the count property from map.
-//   function unique(value, index, self) {
-// 	  return self.indexOf(value) === index; //comparing indexof current values if indexed before, if not it's unique
-// 	}
-// 	let uni = sortedArrayOfStrings.filter(unique); // (v, i, s) => s.indexOf(v) === i;
-// 	j = 0;
-// 	let newi = [];
-// 	while (j < sortedArrayOfStrings.length) {
-// 	  newi[j] = { Language: uni[j], count: map[uni[j]] };
-// 	  j++;
-// 	}
-  
-//   newi.sort((a, b) => {
-// 	  for (let i = 0; i < number; i++) {
-// 		if (a.count > b.count) return -1;
-// 		if (a.count < b.count) return 1;
-// 	  }
-// 	  return 0;
-// 	});
-  
-// 	let final = [];
-// 	for (let i = 0; i < number; i++) {
-// 	  final[i] = newi[i];
-// 	}
-// 	return final;
-//   };
-  
-//   console.log(mostSpokenLanguages(countries_data, 3));
+    // creating a new array of all languages
+  	let languagesArray = [];
+	let j = 0;
+    //looping through each element and storing languages one by one in languagesArray 
+	countries_data.map((element) => element.languages).forEach((element) => {element.forEach((element) => {
+            languagesArray[j] = element.toString().split(",").toString();
+		  j++;
+		});
+	  });
+
+	const set = new Set(languagesArray);
+
+	let filtered_spoken_langugages = [];
+	set.forEach(el => filtered_spoken_langugages.push( {lang : el, count : languagesArray.filter(element => element === el).length}));
+	let most_spoken_langugages = filtered_spoken_langugages.sort((a, b) => b.count - a.count);
+	
+	let left_yValues_column = [];
+	let right_yValues_column = [];
+
+	for (let i = 0; i < 10; i++) {
+		left_yValues_column[i] = most_spoken_langugages[i].lang;
+		right_yValues_column[i] = most_spoken_langugages[i].count;
+	}
 
 
+document.getElementById("languages-btn").onclick =	
+function display_languages(){
+	reset_canvas();
+
+    Chart.defaults.scale.gridLines.display = false;
+    Chart.defaults.scale.gridLines.drawBorder = false;
+    var xValues = left_yValues_column;
+    var yValues = right_yValues_column;
+    var barColors = "#bba802";
 
 
-// ----------------------------------------------
-  
-// got all instances, counted in an array, shortway , day 10 javascript
-// const set = new Set(languages);
+	const left_yValues_div = document.getElementById("left-yValues-column");
+	const right_yValues_div = document.getElementById("right-yValues-column");
+	const left_yValues_spans = document.querySelectorAll("#left-yValues-column > span");
+	const right_yValues_spans = document.querySelectorAll("#right-yValues-column > span");
+	j = 0;
+	for(const span of left_yValues_spans){
+		left_yValues_spans[j].innerHTML = left_yValues_column[j];
+		left_yValues_div.appendChild(span);
+		j++;
+	}
+	j = 0;
+	for(const span of right_yValues_spans){
+		right_yValues_spans[j].innerHTML = right_yValues_column[j];
+		right_yValues_div.appendChild(span);
+		j++;
+	}
 
-// let gotIt = []
-// set.forEach(el => gotIt.push( {lang : el, count : languages.filter(element => element === el).length} ))
-// console.log(gotIt)
-
-
-
-  // const combieTextInReduce = countries.reduce((acc, cur) => countries.indexOf(cur) != countries.length -1 ?
-//                                                                 acc + ', ' + cur : acc + ', and ' + cur +
-//                                                                 " are north European countries");
-
-// countries.map(element => element.languages).filter(element => element.find(
-// 	element => element === "English")).length
-// countries_data.map(element => element.languages).forEach(element => {i[j] = element.toString().split(",")
-//  j++})
-//.sort((a, b) => a.count > a.count))
-
-
-
-
-document.body.onload = 
-	function logic(){
-		const h1 = document.createElement('h1');
-		const h2 = document.createElement('h2');
-		const h3 = document.createElement('h3');
-		const div = document.createElement('div');
-		const countries_names = countries_data.map((element) => element.name);
-		const countries_len = countries_names.length;
-
-		h1.innerHTML = "world countries list".toUpperCase();
-		h2.innerHTML = `Total Numbers of countries: ${countries_len}`;
-		h3.innerHTML = "30DaysOfJavaScript:DOM-Day-2";
-
-		h1.style.cssText = `text-align : center;
-							font : Bold 40px Arial, sans-serif;
-							letter-spacing: 10px;`;
-		h2.style.cssText = `margin-top : -20px;
-							text-align : center;
-							font : Bold 15px Arial, sans-serif;`;
-		h3.style.cssText = `text-align : center;
-						    margin-top : -10px;
-						    font : 13px Arial, sans-serif;`;
-		div.style.cssText = "flex-flow:row wrap; display: flex; margin: 3% auto; width:864px;";
-
-		document.body.appendChild(h1);
-		document.body.appendChild(h2);
-		document.body.appendChild(h3);
-		document.body.appendChild(div);
-
-		for (let i = 0; i < countries_len; i++) {
-			let country_span = document.createElement('span');
-
-			country_span.innerHTML = countries_names[i].toLocaleUpperCase();
-			country_span.style.cssText = `padding : 50px 15px;
-										  width : 100px;
-										  margin : 5px 5px;
-										  font : 12px Arial, sans-serif;
-										  text-align : center;
-										  border : 1px solid rgba(145, 145, 145, 0.2);
-										  border-radius : 5px;`;
-			div.appendChild(country_span);
-			console.log(country_span)
-		}
+const myChart = new Chart("myChart", {
+	type: "horizontalBar",
+	data: {
+	labels: xValues,
+	datasets: [
+		{
+		backgroundColor: barColors,
+		data: yValues,
+		},
+	],
+	},
+	options: {
+	scaleShowLabels: false,
+	legend: { display: false },
+	title: {
+		display: false,
+		text: "",
+	},
+	scales: {
+		xAxes: [
+		{
+			ticks: {
+			display: false, //this will remove only the label
+			},
+		},
+		],
+		yAxes: [
+		{
+			ticks: {
+			display: false, //this will remove only the label
+			},
+		},
+		],
+	},
+	},
+});
 }
 
+//************************************************************************************************** */
+const populationData = function population_data(){
+	let populationArray = 
+    //looping through each element and storing popualtion one by one in populationArray 
+	countries_data.map((element) => {return {country: element.name, population: element.population}});
 
+	let most_populated_countries = populationArray.sort((a, b) => b.population - a.population);
+
+	let left_yValues_column = [];
+	let right_yValues_column = [];
+
+	for (let i = 0; i < 10; i++) {
+		left_yValues_column[i] = most_populated_countries[i].country;
+		right_yValues_column[i] = most_populated_countries[i].population;
+	}
+
+	return {left_yValues_column, right_yValues_column}
+	}
+
+document.getElementById("populaton-btn").onclick =	
+function display_languages(){
+	reset_canvas();
+
+    Chart.defaults.scale.gridLines.display = false;
+    Chart.defaults.scale.gridLines.drawBorder = false;
+    var xValues = populationData().left_yValues_column;
+    var yValues = populationData().right_yValues_column;
+    var barColors = "#bba802";
+
+
+	const left_yValues_div = document.getElementById("left-yValues-column");
+	const right_yValues_div = document.getElementById("right-yValues-column");
+	const left_yValues_spans = document.querySelectorAll("#left-yValues-column > span");
+	const right_yValues_spans = document.querySelectorAll("#right-yValues-column > span");
+	j = 0;
+	for(const span of left_yValues_spans){
+		left_yValues_spans[j].innerHTML = populationData().left_yValues_column[j];
+		left_yValues_div.appendChild(span);
+		j++;
+	}
+	j = 0;
+	for(const span of right_yValues_spans){
+		right_yValues_spans[j].innerHTML = populationData().right_yValues_column[j].toLocaleString();
+		right_yValues_div.appendChild(span);
+		j++;
+	}
+
+const myChart = new Chart("myChart", {
+	type: "horizontalBar",
+	data: {
+	labels: xValues,
+	datasets: [
+		{
+		backgroundColor: barColors,
+		data: yValues,
+		},
+	],
+	},
+	options: {
+	scaleShowLabels: false,
+	legend: { display: false },
+	title: {
+		display: false,
+		text: "",
+	},
+	scales: {
+		xAxes: [
+		{
+			ticks: {
+			display: false, //this will remove only the label
+			},
+		},
+		],
+		yAxes: [
+		{
+			ticks: {
+			display: false, //this will remove only the label
+			},
+		},
+		],
+	},
+	},
+});
+}
+
+function reset_canvas(){
+	document.getElementById('myChart').remove(); 
+	const canvas = document.createElement('canvas');
+	canvas.id = "myChart";
+	canvas.style.cssText = `max-width: 600px; 
+							height: 300px;
+							display: inline-block;`;
+	const div_container = document.getElementById('data-container');
+	let right_column = document.getElementById('right-yValues-column');
+	div_container.insertBefore(canvas, right_column);
+	const iframe_canvas = document.querySelector('iframe');
+	if(iframe_canvas)
+		div_container.removeChild(iframe_canvas);
+	console.log(div_container)
+}
