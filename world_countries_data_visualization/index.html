@@ -2,9 +2,34 @@
 <html>
   <head>
     <style>
+      *{
+        background-color:rgba(240, 240, 240, 0.719);
+      }
+      h1{
+        text-align: center;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      }
+      h2{
+        text-align: center;
+        font: 15px 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        margin: -10px 0 20px;
+      }
+      p{
+        margin-bottom: 2px;
+        background: whrgb(236, 236, 236);
+        font: 15px 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      }
       #data-container{
         display: table;
-        margin: 0 auto;
+        margin: 20px auto 0 auto;
+      }
+      #buttons-container{
+        display: table;
+        width: 100%;
+        text-align: center;
+        padding: 24px 0 0;
+        background: rgb(236, 236, 236);
+        box-shadow: 0px 0px 0px 1px #cdcdcd;
       }
       #left-yValues-column, #right-yValues-column{
         display: inline-block;
@@ -16,14 +41,24 @@
         margin-bottom: 9px;
         font: 18px solid Arial,sans-serif;
       }
+      button{
+        padding: 6px 24px;
+        background: #ff9800;
+        border: none;
+        font-size: 15px;
+        cursor: pointer;
+      }
 
     </style>
   </head>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
   <body>
-    <div id="buttons-container" style="display: table; margin: 100px auto;">
+    <h1>World Countries Data</h1>
+    <h2>Currently, we have <span id="total-countries"></span> Countries</h2>
+    <div id="buttons-container">
       <button id="populaton-btn">Population</button>
       <button id="languages-btn" style="margin-left: 10px;">Languages</button>
+      <p></p>
     </div>
     <div id="data-container">
       <div id="left-yValues-column">

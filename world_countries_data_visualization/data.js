@@ -6,6 +6,8 @@ const left_yValues_div = document.getElementById("left-yValues-column");
 const right_yValues_div = document.getElementById("right-yValues-column");
 const left_yValues_spans = document.querySelectorAll("#left-yValues-column > span");
 const right_yValues_spans = document.querySelectorAll("#right-yValues-column > span");
+const total_countries = document.getElementById("total-countries");
+const p = document.querySelector("p");
 
 //*********************getting & displaying languages data**********************/
 
@@ -44,6 +46,7 @@ const languages_data = function languages_data() {
 
 document.getElementById("languages-btn").onclick =
   function display_languages() {
+	p.innerHTML = "10 Most Spoken Languages in the world"
 	//preventing canvas overlapping on each other, each time trigger button creates a new chart
     reset_canvas();
 
@@ -91,7 +94,7 @@ const populationData = function population_data() {
 
 document.getElementById("populaton-btn").onclick =
   function display_population() {
-    
+	p.innerHTML = "10 Most Popualted Countries in the world"
 	reset_canvas();
 
     j = 0;
@@ -2428,3 +2431,7 @@ const countries_data = [
     area: 390757,
   },
 ];
+
+const countries_data_length = Object.keys(countries_data).length;
+total_countries.innerHTML = countries_data_length;
+
