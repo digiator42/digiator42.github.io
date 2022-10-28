@@ -49,12 +49,12 @@ document.getElementById("languages-btn").onclick =
 
     j = 0;
     for (const span of left_yValues_spans) {
-      left_yValues_spans[j].innerHTML = languages_data().left_yValues_column[j];
+		span.innerHTML = languages_data().left_yValues_column[j];
       j++;
     }
     j = 0;
     for (const span of right_yValues_spans) {
-      right_yValues_spans[j].innerHTML = languages_data().right_yValues_column[j];
+		span.innerHTML = languages_data().right_yValues_column[j];
       j++;
     }
 
@@ -96,12 +96,12 @@ document.getElementById("populaton-btn").onclick =
 
     j = 0;
     for (const span of left_yValues_spans) {
-      left_yValues_spans[j].innerHTML = populationData().left_yValues_column[j];
+		span.innerHTML = populationData().left_yValues_column[j];
       j++;
     }
     j = 0;
     for (const span of right_yValues_spans) {
-      right_yValues_spans[j].innerHTML = populationData().right_yValues_column[j].toLocaleString();
+		span.innerHTML = populationData().right_yValues_column[j].toLocaleString();
       j++;
     }
 
