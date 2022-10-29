@@ -2,6 +2,7 @@
 Chart.defaults.scale.gridLines.display = false; //default chart none gridline
 Chart.defaults.scale.gridLines.drawBorder = false; ///default chart none drawBorder
 
+const barColors = "#ff9800";
 const left_yValues_div = document.getElementById("left-yValues-column");
 const right_yValues_div = document.getElementById("right-yValues-column");
 const left_yValues_spans = document.querySelectorAll("#left-yValues-column > span");
@@ -72,7 +73,6 @@ document.getElementById("languages-btn").onclick =
 
     var xValues = left_yValues_column;
     var yValues = right_yValues_column;
-    var barColors = "#ff9800";
 
     createChart(xValues, yValues, barColors);
   };
@@ -136,7 +136,6 @@ document.getElementById("populaton-btn").onclick =
     xValues.unshift("World");
     var yValues = right_yValues_column;
     yValues.unshift(world_population);
-    var barColors = "#bba802";
 
     createChart(xValues, yValues, barColors);
   };
