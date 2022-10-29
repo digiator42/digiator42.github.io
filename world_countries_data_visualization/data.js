@@ -72,7 +72,7 @@ document.getElementById("languages-btn").onclick =
 
     var xValues = left_yValues_column;
     var yValues = right_yValues_column;
-    var barColors = "#bba802";
+    var barColors = "#ff9800";
 
     createChart(xValues, yValues, barColors);
   };
