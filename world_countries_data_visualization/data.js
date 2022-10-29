@@ -46,23 +46,32 @@ const languages_data = function languages_data() {
 
 document.getElementById("languages-btn").onclick =
   function display_languages() {
+	const left_yValues_column = languages_data().left_yValues_column;
+	const right_yValues_column = languages_data().right_yValues_column;
+
 	p.innerHTML = "10 Most Spoken Languages in the world"
 	//preventing canvas overlapping on each other, each time trigger button creates a new chart
     reset_canvas();
 
     j = 0;
     for (const span of left_yValues_spans) {
-		span.innerHTML = languages_data().left_yValues_column[j];
+      if(j == 10) // extra span added for world population, need to stop once loop reach 10th element
+        break;
+		span.innerHTML = left_yValues_column[j];
       j++;
     }
+    left_yValues_spans[j].innerHTML = "";
     j = 0;
     for (const span of right_yValues_spans) {
-		span.innerHTML = languages_data().right_yValues_column[j];
+      if(j == 10)
+        break;
+		span.innerHTML = right_yValues_column[j];
       j++;
     }
+    right_yValues_spans[j].innerHTML = "";
 
-    var xValues = languages_data().left_yValues_column;
-    var yValues = languages_data().right_yValues_column;
+    var xValues = left_yValues_column;
+    var yValues = right_yValues_column;
     var barColors = "#bba802";
 
     createChart(xValues, yValues, barColors);
@@ -94,34 +103,56 @@ const populationData = function population_data() {
 
 document.getElementById("populaton-btn").onclick =
   function display_population() {
-	p.innerHTML = "10 Most Popualted Countries in the world"
-	reset_canvas();
+	const left_yValues_column = populationData().left_yValues_column;
+	const right_yValues_column = populationData().right_yValues_column;
 
-    j = 0;
-    for (const span of left_yValues_spans) {
-		span.innerHTML = populationData().left_yValues_column[j];
-      j++;
-    }
-    j = 0;
-    for (const span of right_yValues_spans) {
-		span.innerHTML = populationData().right_yValues_column[j].toLocaleString();
-      j++;
-    }
+	let world_population = 0;
+	countries_data.forEach((element) => {
+		world_population += element.population;
+	});
 
-    var xValues = populationData().left_yValues_column;
-    var yValues = populationData().right_yValues_column;
+	p.innerHTML = "10 Most Popualted Countries in the world";
+  const canvas_height = true;
+	reset_canvas(canvas_height); // changing canvas height & margin to fit data values
+
+  j = 0;
+	i = 1;
+	left_yValues_spans[0].innerHTML = "World";
+    while ( i < left_yValues_spans.length) {
+		left_yValues_spans[i].innerHTML = left_yValues_column[j];
+      j++;
+      i++;
+    }
+  j = 0;
+	i = 1;
+	right_yValues_spans[0].innerHTML = world_population.toLocaleString();
+	while ( i < right_yValues_spans.length) {
+		right_yValues_spans[i].innerHTML = right_yValues_column[j].toLocaleString();
+      j++;
+      i++;
+    }
+    var xValues = left_yValues_column;
+
+    xValues.unshift("World");
+    var yValues = right_yValues_column;
+    yValues.unshift(world_population);
     var barColors = "#bba802";
 
     createChart(xValues, yValues, barColors);
   };
 //resetting canvas, stop overlapping
-function reset_canvas() {
+function reset_canvas(canvas_height) {
   document.getElementById("myChart").remove();
   const canvas = document.createElement("canvas");
   canvas.id = "myChart";
-  canvas.style.cssText = `max-width: 600px; 
-							height: 300px;
-							display: inline-block;`;
+  canvas.style.cssText = `max-width: 613px;
+                          min-height: 307px;
+                          margin-bottom: 10px;                        
+                          display: inline-block;`;
+  if(canvas_height){
+    canvas.style.minHeight = "335px";
+    canvas.style.marginBottom = "0px";
+  }
   const div_container = document.getElementById("data-container");
   let right_column = document.getElementById("right-yValues-column");
   div_container.insertBefore(canvas, right_column);
@@ -135,12 +166,10 @@ function createChart(xValues, yValues, barColors) {
     type: "horizontalBar",
     data: {
       labels: xValues,
-      datasets: [
-        {
+      datasets: [{
           backgroundColor: barColors,
           data: yValues,
-        },
-      ],
+        }],
     },
     options: {
       scaleShowLabels: false,
@@ -150,20 +179,16 @@ function createChart(xValues, yValues, barColors) {
         text: "",
       },
       scales: {
-        xAxes: [
-          {
+        xAxes: [{
             ticks: {
-              display: false, //this will remove only the label
+              display: false, //removing xAxes data, replaced with spans
             },
-          },
-        ],
-        yAxes: [
-          {
+          }],
+        yAxes: [{
             ticks: {
-              display: false, //this will remove only the label
+              display: false, //removing yAxes data, replaced with spans
             },
-          },
-        ],
+          }],
       },
     },
   });

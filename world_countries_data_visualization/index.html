@@ -4,25 +4,28 @@
     <style>
       *{
         background-color:rgba(240, 240, 240, 0.719);
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
       }
       h1{
         text-align: center;
-        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        color: #ff9800;
       }
       h2{
         text-align: center;
-        font: 15px 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font: 18px solid;
         margin: -10px 0 20px;
       }
       p{
         margin-bottom: 2px;
         background: whrgb(236, 236, 236);
-        font: 15px 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font-size: 15px;
       }
       #data-container{
         display: table;
         margin: 20px auto 0 auto;
-      }
+        max-height: 335px;
+        overflow: hidden;
+      } 
       #buttons-container{
         display: table;
         width: 100%;
@@ -33,13 +36,14 @@
       }
       #left-yValues-column, #right-yValues-column{
         display: inline-block;
+        margin: 10px;
         max-width: 200px;
-        height: 300px;
+        max-height: 335px;
       }
       #left-yValues-column > span, #right-yValues-column > span{
         display: table;
         margin-bottom: 9px;
-        font: 18px solid Arial,sans-serif;
+        font: 17px solid Arial,sans-serif;
       }
       button{
         padding: 6px 24px;
@@ -72,11 +76,13 @@
         <span></span>
         <span></span>
         <span></span>
+        <span></span>
       </div>
       <canvas
         id="myChart">
       </canvas>
       <div id="right-yValues-column">
+        <span></span>
         <span></span>
         <span></span>
         <span></span>
