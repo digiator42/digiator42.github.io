@@ -4,8 +4,6 @@ Chart.defaults.scale.gridLines.drawBorder = false; ///default chart none drawBor
 
 const countries_data_length = Object.keys(countries_data).length;
 const barColors = "#ff9800";
-const left_yValues_div = document.getElementById("left-yValues-column");
-const right_yValues_div = document.getElementById("right-yValues-column");
 const left_yValues_spans = document.querySelectorAll("#left-yValues-column > span");
 const right_yValues_spans = document.querySelectorAll("#right-yValues-column > span");
 const total_countries = document.getElementById("total-countries");
@@ -20,20 +18,18 @@ const languages_data = function languages_data() {
   let languagesArray = [];
   let j = 0;
   //looping through each element and storing languages one by one in languagesArray
-  countries_data
-    .map((element) => element.languages)
-    .forEach((element) => {
-      element.forEach((element) => {
-        languagesArray[j] = element.toString().split(",").toString();
-        j++;
-      });
-    });
+  countries_data.map((element) => element.languages).forEach((element) => {
+                      element.forEach((element) => {
+                        languagesArray[j] = element;
+                        j++;
+                      });
+                    });
   //creating a new set of languages array for unique values
   const set = new Set(languagesArray);
 
   //comparing set(unique values) // each unique value with original array to get frequency of each language
   let filtered_spoken_langugages = [];
-  set.forEach((language) =>filtered_spoken_langugages.push({
+  set.forEach((language) => filtered_spoken_langugages.push({
       lang: language, count: languagesArray.filter((element) => element === language).length})
   );
   let most_spoken_langugages = filtered_spoken_langugages.sort((a, b) => b.count - a.count);
@@ -61,7 +57,7 @@ document.getElementById("languages-btn").onclick =
     for (const span of left_yValues_spans) {
       if(j == 10) // extra span added for world population, need to stop once loop reach 10th element
         break;
-		span.innerHTML = left_yValues_column[j];
+		  span.innerHTML = left_yValues_column[j];
       j++;
     }
     left_yValues_spans[j].innerHTML = "";
@@ -69,7 +65,7 @@ document.getElementById("languages-btn").onclick =
     for (const span of right_yValues_spans) {
       if(j == 10)
         break;
-		span.innerHTML = right_yValues_column[j];
+		  span.innerHTML = right_yValues_column[j];
       j++;
     }
     right_yValues_spans[j].innerHTML = "";
@@ -134,8 +130,8 @@ document.getElementById("populaton-btn").onclick =
       j++;
       i++;
     }
-    var xValues = left_yValues_column;
 
+    var xValues = left_yValues_column;
     xValues.unshift("World");
     var yValues = right_yValues_column;
     yValues.unshift(world_population);
@@ -156,7 +152,7 @@ function reset_canvas(canvas_height) {
     canvas.style.marginBottom = "0px";
   }
   const div_container = document.getElementById("data-container");
-  let right_column = document.getElementById("right-yValues-column");
+  const right_column = document.getElementById("right-yValues-column");
   div_container.insertBefore(canvas, right_column);
   const iframe_canvas = document.querySelector("iframe");
   if (iframe_canvas) 
