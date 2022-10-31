@@ -85,16 +85,21 @@ input.addEventListener('keyup', (() => {
 			let country_span = document.createElement('span');
 			country_span.innerHTML = result[i].toLocaleUpperCase();
 
-			country_span.style.cssText = `background-color: #0023428a;
+			country_span.style.cssText = `display: flex;
+                                          justify-content: center;
+                                          align-items: center;
+                                          text-align: center;
+                                          background-color: #0023428a;
                                           background-image: url("global.jpg");
                                           background-size : cover;
                                           background-blend-mode: multiply;
+                                          color: white;
+                                          font : bold 15px Arial, sans-serif;
                                           padding : 50px 15px;
-										  width : 100px;
-										  margin : 5px 5px;
-                                          color: white ;
-										  font : bold 15px Arial, sans-serif;
-										  text-align : center;
+                                          margin : 13px;
+										  width : 80px;
+                                          max-height : 120px;
+                                          line-height: 13px;
 										  border : 1px solid rgba(145, 145, 145, 0.2);
 										  border-radius : 5px;`;   
 			div.appendChild(country_span);
