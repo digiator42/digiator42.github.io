@@ -71,7 +71,7 @@ input.addEventListener('keyup', (() => {
         if(firstChecked)
             result = countries_names.filter(element => element.toUpperCase().startsWith(inputValue.toUpperCase()));
         if(secondChecked)   
-            result = countries_names.filter(element => element.toUpperCase().indexOf(inputValue.toUpperCase()) != -1)//element.toUpperCase().startsWith(inputValue.toUpperCase()));
+            result = countries_names.filter(element => element.toUpperCase().indexOf(inputValue.toUpperCase()) != -1)
  
         console.log(result);
 		const len = result.length;
@@ -85,13 +85,14 @@ input.addEventListener('keyup', (() => {
 			let country_span = document.createElement('span');
 			country_span.innerHTML = result[i].toLocaleUpperCase();
 
-			country_span.style.cssText = `background-color: rgba(0, 33, 43, 0.452);
-            background: url("global.webp"), #6DB3F2;
-            background-size : cover;
+			country_span.style.cssText = `background-color: #0023428a;
+                                          background-image: url("global.jpg");
+                                          background-size : cover;
+                                          background-blend-mode: multiply;
                                           padding : 50px 15px;
 										  width : 100px;
 										  margin : 5px 5px;
-                                          color: black;
+                                          color: white ;
 										  font : bold 15px Arial, sans-serif;
 										  text-align : center;
 										  border : 1px solid rgba(145, 145, 145, 0.2);
