@@ -66,8 +66,10 @@ input.addEventListener("keyup", () => {
   if (spans.length > 0) {
     div.innerHTML = "";
   }
-  if (!inputValue) 
+  if (!inputValue){ 
+    error_msg.innerHTML = ``;
     logic();
+  }
   const checked = true;
   const unChecked = false;
   if (!firstButton.checked && !secondButton.checked) {
@@ -140,6 +142,8 @@ function logic(inputValue, firstChecked, secondChecked) {
     else if (len == 0 && secondChecked){
         error_msg.innerHTML = `There's no country includes ${inputValue}`;
     }
+    if (len == 0 && inputValue.trim().length == 0)
+        error_msg.innerHTML = `There's no country includes spaces`;
 
     for (let i = 0; i < len; i++) {
         let country_span = document.createElement("span");
