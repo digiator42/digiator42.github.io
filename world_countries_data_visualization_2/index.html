@@ -11,6 +11,23 @@
         font: 18px arial, sans-serif;
         font-size: x-large;
       }
+      #sort-div{
+        top: 50%;
+        display: inline-block;
+      }
+      #sort+label {
+        padding: 6px 18px;
+        background: #9b00d8;
+        background-image: url("icon.png");
+        background-size : contain;
+        color: aliceblue;
+      }
+      input[type=checkbox]:not(#first, #second):checked+label  {
+        background: #530572;
+        background-image: url("icon_flipped.png");
+        background-size : contain;
+      }
+
       #upper_background{
         width: 105%;
         height: 321px;
@@ -23,14 +40,14 @@
       }
       #div-background {
         color: white;
-        background-color: rgba(0, 33, 43, 0.452);
+        background-color: #033240a1;
         font-weight: bold;
         position: absolute;
         top: 150px;
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 1;
-        width: 100%;
+        width: 107%;
         height: 300px;
         padding: 20px 20px;
         text-align: center;
@@ -55,6 +72,7 @@
       }
 
       input[type=checkbox]+label {
+        filter: drop-shadow(3px 6px 8px black);
         padding: 6px 24px;
         color: aliceblue;
         margin-left: 4px;
@@ -64,7 +82,7 @@
         cursor: pointer;
       }
 
-      input[type=checkbox]:checked+label {
+      input[type=checkbox]:not(#sort):checked+label {
         padding: 6px 24px;
         background: #41015a;
         border: none;
@@ -95,8 +113,12 @@
         <label for="first">Starting word</label>
         <input type="checkbox" class="hidden" name="cb" id="second">
         <label for="second">Starting with any</label>
+        <div id="sort-div">
+          <input type="checkbox" class="hidden" name="cb" id="sort">
+          <label for="sort"></label>
+        </div>
       </div>
-      <input type="text" name="search" id="search" placeholder="search country...">
+      <input type="text" name="search" id="search" placeholder="Search country...">
       <p id="error-msg"></p>
     </div>
   </body>
