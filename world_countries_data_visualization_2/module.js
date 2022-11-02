@@ -84,7 +84,6 @@ input.addEventListener("keyup", () => {
     logic(inputValue, unChecked, checked);
   }
 });
-let flipper = true;
 
 sort.addEventListener("click", () => {
   spans = document.body.querySelectorAll("div > span");
@@ -92,10 +91,10 @@ sort.addEventListener("click", () => {
   for (let i = 0; i < spans.length; i++) {
     result.push(spans[i].innerText);
   }
-  if (flipper) {
+  if (true) {
     result.sort((a, b) => {
-      if (a > b) return -1;
-      if (b > a) return 1;
+      if (a > b && a.charCodeAt() >= 65 || a.charCodeAt() <= 122) return -1;
+      if (b > a && a.charCodeAt() >= 65 || a.charCodeAt() <= 122) return 1;
       return 0;
     });
     div.innerHTML = "";
@@ -105,21 +104,7 @@ sort.addEventListener("click", () => {
       country_span.style.cssText = span_cssText;
       div.appendChild(country_span);
     }
-  } else {
-    result.sort((a, b) => {
-      if (a > b) return 1;
-      if (b > a) return -1;
-      return 0;
-    });
-    div.innerHTML = "";
-    for (let i = 0; i < result.length; i++) {
-      let country_span = document.createElement("span");
-      country_span.innerHTML = result[i].toLocaleUpperCase();
-      country_span.style.cssText = span_cssText;
-      div.appendChild(country_span);
-    }
-  }
-  flipper = !flipper;
+  } 
 });
 
 function logic(inputValue, firstChecked, secondChecked) {
