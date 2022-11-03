@@ -54,21 +54,26 @@ const firstButton = document.getElementById("first");
 const secondButton = document.getElementById("second");
 
 firstButton.addEventListener("click", () => {
-  if (secondButton.checked) secondButton.checked = false;
+    error_msg.innerHTML = '';
+    secondButton.checked = false;
+    sort.checked = false;
 });
 secondButton.addEventListener("click", () => {
-  if (firstButton.checked) firstButton.checked = false;
+    error_msg.innerHTML = '';
+    firstButton.checked = false;
+    sort.checked = false;
 });
 
 let spans = document.body.querySelectorAll("div > span");
 
 var inputValue;
-input.addEventListener("keyup", () => {
+input.addEventListener("keyup", () => {  //input event listners.
   inputValue = input.value;
   if (spans.length > 0) {
     div.innerHTML = "";
   }
   if (!inputValue){ 
+    error_msg.innerHTML = "";
     h3.innerHTML = ``;
     logic();
   }
@@ -87,7 +92,7 @@ input.addEventListener("keyup", () => {
   }
 });
 
-sort.addEventListener("click", () => {
+sort.addEventListener("click", () => { // sorting button event listner 
   spans = document.body.querySelectorAll("div > span");
   let result = [];
   for (let i = 0; i < spans.length; i++) {
@@ -143,7 +148,6 @@ function logic(inputValue, firstChecked, secondChecked) {
                                   font: 18px arial, sans-serif;
                                   font-weight : 800`;   
     }
-
     for (let i = 0; i < len; i++) { //diplaying result by creating span for each result. 
         let country_span = document.createElement("span");
         country_span.innerHTML = result[i].toLocaleUpperCase();
