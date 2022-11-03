@@ -26,11 +26,11 @@ let span_cssText = `display: flex;
                     line-height: 13px;
                     border : 1px solid rgba(145, 145, 145, 0.2);
                     border-radius : 5px;`;
-const countries_names = countries_data.map((element) => element.name);
+                 
+const countries_names = countries_data.map((element) => element.name); //filtering countries names in new map.
 
 h1.innerHTML = "world countries list".toUpperCase();
 h2.innerHTML = `Total Numbers of countries: ${countries_names.length}`;
-h3.innerHTML = "30DaysOfJavaScript:DOM-Day-2";
 
 h1.style.cssText = `text-align : center;
                     font : Bold 40px Arial, sans-serif;
@@ -39,14 +39,16 @@ h2.style.cssText = `margin-top : -20px;
                     text-align : center;
                     font : Bold 15px Arial, sans-serif;`;
 h3.style.cssText = `text-align : center;
-                    margin-top : -10px;
-                    font : 13px Arial, sans-serif;`;
-div.style.cssText =
-  "flex-flow:row wrap; display: flex; margin: 3% auto; width:864px;";
+                    font : 16px Arial, sans-serif;
+                    margin-bottom: 0`;
+div.style.cssText =`flex-flow:row wrap;
+                    display: flex;
+                    margin: 3% auto;
+                    width:864px;`;
 
 document.body.appendChild(div);
 
-logic(); //dispalying all countries once page load, all pramerters are flase
+document.body.onload =  logic(); //dispalying all countries once page load, all pramerters are flase
 
 const firstButton = document.getElementById("first");
 const secondButton = document.getElementById("second");
@@ -67,7 +69,7 @@ input.addEventListener("keyup", () => {
     div.innerHTML = "";
   }
   if (!inputValue){ 
-    error_msg.innerHTML = ``;
+    h3.innerHTML = ``;
     logic();
   }
   const checked = true;
@@ -124,13 +126,25 @@ function logic(inputValue, firstChecked, secondChecked) {
     if (len == 0 && firstChecked){
         error_msg.innerHTML = `There's no country starts with ${inputValue}`;
     }
-    else if (len == 0 && secondChecked){
+    if (len == 0 && secondChecked){
         error_msg.innerHTML = `There's no country includes ${inputValue}`;
     }
-    if (len == 0 && inputValue.trim().length == 0)
+    if (len == 0 && inputValue.trim().length == 0) //checking if user input is spaces.
         error_msg.innerHTML = `There's no country includes spaces`;
+    if(firstChecked || secondChecked){
+        h3.innerHTML = `Searched Countries with <span id="h3-input">
+              ${inputValue.toUpperCase()} </span>are <span id="h3-count">${len}</span>`;
+        const h3_input = document.getElementById('h3-input');
+        const h3_count = document.getElementById('h3-count');
+        h3_input.style.cssText = `color: #ff3b00;
+                                  font: 18px arial;
+                                  font-weight : 800`;                    
+        h3_count.style.cssText = `color: #66fd63e0;
+                                  font: 18px arial, sans-serif;
+                                  font-weight : 800`;   
+    }
 
-    for (let i = 0; i < len; i++) {
+    for (let i = 0; i < len; i++) { //diplaying result by creating span for each result. 
         let country_span = document.createElement("span");
         country_span.innerHTML = result[i].toLocaleUpperCase();
 
