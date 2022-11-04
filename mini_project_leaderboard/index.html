@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+      #holder{
+        margin: 7% 0 auto 0;
+      }
+      #container {
+        display: flex;
+        background: #c1565685;
+        font: 16px arial, sans-serif;
+        margin: 1% auto;
+        width: 687px;
+        height: 90px;
+        flex-flow: wrap;
+        align-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+      #input-container {
+        display: table;
+        margin: 105px auto 0 auto;
+      }
+      #country,
+      #score {
+        text-align: left;
+      }
+      input {
+        padding: 7px 6px;
+        width: 118px;
+        margin-left: 10px;
+      }
+      input:focus {
+        border-color: #ee0101;
+      }
+      #buttons {
+        float: right;
+      }
+      button {
+        /* filter: drop-shadow(3px 6px 8px black); */
+        padding: 12px 11px;
+        color: rgb(226, 0, 49);
+        margin-left: 4px;
+        background: #ffffff;
+        border: none;
+        border-radius: 19px;
+        font-size: 17px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #16003a;
+      }
+      #add-player {
+        padding: 7px 11px;
+        color: rgb(226, 0, 49);
+        margin-left: 4px;
+        background: #ffffff;
+        border: 1px solid;
+        border-radius: 19px;
+        font-size: 17px;
+        cursor: pointer;
+      }
+      #add-player:hover {
+        background: #16003a;
+      }
+    </style>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="./main.js"></script>
+  </head>
+  <body onload="myFunction()">
+    <div id="input-container">
+      <input type="text" id="fName" placeholder="First Name"/>
+      <input type="text" id="sName" placeholder="Second Name"/>
+      <input type="text" id="country" placeholder="Country"/>
+      <input type="text" id="pScore" placeholder="Player Score"/>
+      <button id="add-player">Add Player</button>
+    </div>
+    <div id="holder"></div>
+    <div id="next-sibling"></div>
+  </body>
+</html>
