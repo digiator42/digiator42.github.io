@@ -2,10 +2,15 @@
 <html lang="en">
   <head>
     <style>
+
       #holder{
         margin: 7% 0 auto 0;
       }
-      #container {
+      #input-container {
+        display: table;
+        margin: 105px auto 0 auto;
+      }
+      [id*=container]:not(#input-container) {
         display: flex;
         background: #c1565685;
         font: 16px arial, sans-serif;
@@ -13,15 +18,11 @@
         width: 687px;
         height: 90px;
         flex-flow: wrap;
-        align-content: space-between;
+        /* align-content: space-between; */
         align-items: center;
         flex-wrap: wrap;
         flex-direction: row;
         justify-content: space-between;
-      }
-      #input-container {
-        display: table;
-        margin: 105px auto 0 auto;
       }
       #country,
       #score {
@@ -80,7 +81,8 @@
       <input type="text" id="pScore" placeholder="Player Score"/>
       <button id="add-player">Add Player</button>
     </div>
-    <div id="holder"></div>
-    <div id="next-sibling"></div>
+    <div id="holder">
+
+    </div>
   </body>
 </html>
