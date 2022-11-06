@@ -3,7 +3,7 @@
   <head>
     <style>
       #holder{
-        margin: 7% 0 auto 0;
+        margin: 20px 0 auto 0;
       }
       #input-container {
         display: table;
@@ -13,7 +13,7 @@
         display: flex;
         background: #c1565685;
         font: 16px arial, sans-serif;
-        margin: 1% auto;
+        margin: 10px auto;
         width: 687px;
         height: 90px;
         flex-flow: wrap;
@@ -69,6 +69,13 @@
         font: 13px solid arial, sans-serif;
         color: rgb(82, 71, 71);
       }
+      p:not(#date){
+        font: 18px solid arial, sans-serif;
+      }
+      #error-msg{
+        display: table;
+        margin: 4px auto;
+      }
     </style>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -84,6 +91,7 @@
       <input type="text" id="pScore" placeholder="Player Score"/>
       <button id="add-player">Add Player</button>
     </div>
+    <div id="error-msg"></div>
     <div id="holder">
 
     </div>
