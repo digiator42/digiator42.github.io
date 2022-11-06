@@ -29,8 +29,8 @@ function myFunction() {
 
     if(!fName_value || !sName_value || !country_value || !pScore_value)
       error_msg.innerHTML = 'All fields are required'
-    else if(isNaN(pScore_value) || pScore_value < 0)
-      error_msg.innerHTML = 'Score must be a positive number'
+    else if(isNaN(pScore_value))
+      error_msg.innerHTML = 'Score must be a number'
     else{
     error_msg.innerHTML = '';
     holder_container.insertAdjacentHTML("beforeend", new_leader_board);
@@ -39,43 +39,49 @@ function myFunction() {
     }
   });
 
+  holder_container.addEventListener("click", (event) => {
+    let target = event.target;
 
-  if (holder_container.addEventListener) {
-    holder_container.addEventListener("click", onClick);
-  }
-  function onClick(event) {
-    var target = event.target ? event.target : event.srcElement;
-
-    if (target.id == "delete") {
-        target.parentNode.parentNode.remove();
-        console.log(1);
+    while(target.parentNode.id == "buttons"){
+      if (target.id == "delete") {
+          target.parentNode.parentNode.remove();
+      }
+      else if(target.id == "increase-score"){
+        let result = parseInt(target.parentNode.previousElementSibling.innerHTML) + 5;
+        target.parentNode.previousElementSibling.innerHTML = result;
+      }
+      else if(target.id == "decrease-score"){
+        let result = parseInt(target.parentNode.previousElementSibling.innerHTML) - 5;
+        target.parentNode.previousElementSibling.innerHTML = result;
+      }
+      sort_items();
+      break;
     }
-    else if(target.id == "increase-score"){
-      let result = parseInt(target.parentNode.previousElementSibling.innerHTML) + 5;
-      target.parentNode.previousElementSibling.innerHTML = result;
-      console.log(result);
-    }
-    else if(target.id == "decrease-score"){
-      let result = parseInt(target.parentNode.previousElementSibling.innerHTML) - 5;
-      target.parentNode.previousElementSibling.innerHTML = result;
-      console.log(result);
-    }
-    sort_items();
-  }
-
+    return 0;
+  });
+  
   function sort_items(){
     let all_leader_containers = document.querySelectorAll('#holder > div');
-    console.log(all_leader_containers);
 
     for (let i = 0; i < all_leader_containers.length; i++) {
       scores.push({container : all_leader_containers[i], 
         score : parseInt(all_leader_containers[i].children[2].innerHTML)});
     }
     scores.sort((a, b) => b.score - a.score);
-    console.log(scores)
     holder_container.innerHTML = '';
     for (let i = 0; i < scores.length; i++) {
-      holder_container.appendChild(scores[i].container);
+        holder_container.appendChild(scores[i].container);
+    }
+
+    all_leader_containers = document.querySelectorAll('#holder > div');
+    for (let i = 0; i < all_leader_containers.length; i++) {
+      if(i % 2 == 0){
+        let id = scores[i].container.id;
+        all_leader_containers[i].style.backgroundColor = '#c96fc5';  
+      }
+      else{
+        all_leader_containers[i].style.backgroundColor = '#c1565685'; 
+      }
     }
     scores = [];
   }
@@ -88,7 +94,6 @@ function myFunction() {
     let day = now.toLocaleDateString();
     let month = now.toLocaleDateString('en-US', { month: 'long' });
     let year = now.getFullYear();
-    console.log(day)
     if(hours < 10)
       hours = '0' + hours;
     if(minutes < 10)
