@@ -1,0 +1,94 @@
+$primary-color : #444;
+$secondary-color : #eece1a;
+$home-image : url(https://github.com/bradtraversy/modern_portfolio/blob/master/dist/img/background.jpg?raw=true);
+
+@mixin easOut{
+    transition: all 0.5s ease-out;
+}
+
+@mixin background{
+    &#bg-img{
+        background: $home-image;
+        background-attachment: fixed;
+        background-size: cover;
+        z-index: 1;
+    }
+    .overlay {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 100%;
+        background:rgba($color: $primary-color, $alpha: 0.65);
+        z-index: 0;
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+body {
+    @include background;
+    background: $primary-color;
+    color: #fff;
+    height: 100%;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.5;
+}
+//Headings
+h1, h2, h3 {
+    margin: 0;
+    font-weight: 400;
+
+    .secondary-text{
+        color: $secondary-color;
+    }
+
+    &.lg-heading{
+        font-size: 6rem;
+    }
+
+    &.sm-heading{
+        width: fit-content;
+        margin-bottom: 2rem;
+        padding: 0.2rem 1rem;
+        background: rgba($color: lighten($color: $primary-color, $amount: 2), $alpha: 0.5); 
+    }
+}
+
+a{
+    color: #fff;
+    text-decoration: none;
+    :hover::after{
+        content: '';
+        background-color: $primary-color;
+    }
+}
+
+header {
+    position: fixed;
+    z-index: 2;
+    width: 100%;
+}
+
+main {
+    padding: 4rem;
+    height: 100%;
+
+    .icons {
+        margin-top: 1rem;
+
+        a {
+            padding: 0.4rem;
+            &:hover{
+                color: $secondary-color;
+                @include easOut();
+            }
+        }
+    }
+    &#home {
+        overflow: hidden;
+        // margin-top: 20vh;
+    }
+}

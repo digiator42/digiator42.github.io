@@ -1,0 +1,22 @@
+{
+  "name": "javascript",
+  "description": "Develop the following application, use the following HTML elements to get started with. You will get the same code on starter folder. Apply all the styles and functionality using JavaScript only.",
+  "version": "1.0.0",
+  "main": "portfolio.js",
+  "scripts": {
+    "sass": "node-sass -w scss/ -o dist/css --recursive"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/digiator42/Javascript.git"
+  },
+  "author": "Ahmed Hassan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/digiator42/Javascript/issues"
+  },
+  "homepage": "https://github.com/digiator42/Javascript#readme",
+  "dependencies": {
+    "node-sass": "^8.0.0"
+  }
+}
