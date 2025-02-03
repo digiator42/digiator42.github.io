@@ -10,11 +10,11 @@ const nextMonthButton = document.getElementById('nextMonth');
 const addHabitButton = document.getElementById('addHabit');
 
 function saveHabits() {
-    sessionStorage.setItem('habits', JSON.stringify(habits));
+    localStorage.setItem('habits', JSON.stringify(habits));
 }
 
 function loadHabits() {
-    const habitsData = sessionStorage.getItem('habits');
+    const habitsData = localStorage.getItem('habits');
     return habitsData ? JSON.parse(habitsData) : [];
 }
 
@@ -33,8 +33,8 @@ function renderCalendar(date) {
     let calendarDaysNumbers = '';
     for (let i = 1; i <= daysInMonth; i++) {
         const dayName = new Date(year, month, i).toLocaleString('default', { weekday: 'short' });
-        calendarDaysNames += `<div class="text-center w-7 py-2 border rounded index=${i}">${dayName}</div>`;
-        calendarDaysNumbers += `<div class="text-center w-7 py-2 border rounded index=${i}">${i}</div>`;
+        calendarDaysNames += `<div class="text-xs text-center w-8 py-2 border rounded">${dayName}</div>`;
+        calendarDaysNumbers += `<div class="text-sm text-center w-8 py-2 border rounded index=${i}">${i}</div>`;
     }
     daysNames.innerHTML = calendarDaysNames;
     daysNumbers.innerHTML = calendarDaysNumbers;
@@ -52,7 +52,7 @@ function renderHabits() {
           <h3 class="font-semibold mb-2">${habit.name}</h3>
           <button id="clearCurrentMonth" class="m-2" onclick="clearCurrentMonth(event)">❌</button>
         </div>
-          <div class="grid grid-flow-col gap-2 w-full">
+          <div class="grid grid-flow-col justify-between gap-1 w-full">
             ${Array(new Date(year, month, 0).getDate())
                     .fill()
                     .map(
@@ -60,10 +60,10 @@ function renderHabits() {
                             const day = i + 1;
                             const isChecked = habit.days[year]?.[month]?.includes(day) || false;
                             return `
-                    <div class="relative group overflow-visible">
+                    <div class="relative group overflow-visible z-11">
                       <input type="checkbox" index="${index}" data-day="${day}" ${isChecked ? 'checked' : ''
                                 } class="w-7 h-6 rounded border-gray-300">
-                      <div class="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 bg-gray-600 text-white text-xs px-2 py-1 rounded z-10 transition-opacity duration-300">
+                      <div class="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 bg-gray-600 text-white text-xs px-2 py-1 rounded z-10 transition-opacity duration-300 z-12">
                         ${day}
                       </div>
                     </div>
@@ -122,7 +122,7 @@ nextMonthButton.addEventListener('click', () => {
 addHabitButton.addEventListener('click', () => {
     const habitElement = document.createElement('div');
     habitElement.innerHTML = `
-        <div class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+        <div class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
             <div class="bg-white p-6 rounded shadow-lg">
                 <h2 class="text-lg font-semibold mb-4">Add New Habit</h2>
                 <input type="text" id="newHabit" class="border p-2 w-full mb-4" placeholder="Enter habit name">
@@ -131,7 +131,6 @@ addHabitButton.addEventListener('click', () => {
                     <button id="saveButton" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
                 </div>
             </div>
-
         </div>
     `;
     document.body.appendChild(habitElement);
