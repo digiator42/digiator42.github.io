@@ -24,24 +24,20 @@ function renderCalendar(date) {
     const lastDay = new Date(year, month + 1, 0);
     const daysInMonth = lastDay.getDate();
 
-
-    let daysNames = calendarElement.querySelectorAll('div')[0];
-    let daysNumbers = calendarElement.querySelectorAll('div')[1];
+    console.log(daysInMonth)
+    let daysNames = document.getElementById('days-names');
+    let daysNumbers = document.getElementById('days-numbers');
 
     currentMonthElement.textContent = `${date.toLocaleString('default', { month: 'long' })} ${year}`;
-    let calendarHTML = '';
+    let calendarDaysNames = '';
+    let calendarDaysNumbers = '';
     for (let i = 1; i <= daysInMonth; i++) {
         const dayName = new Date(year, month, i).toLocaleString('default', { weekday: 'short' });
-        calendarHTML += `<div class="text-center w-7 py-2 border rounded">${dayName}</div>`;
+        calendarDaysNames += `<div class="text-center w-7 py-2 border rounded index=${i}">${dayName}</div>`;
+        calendarDaysNumbers += `<div class="text-center w-7 py-2 border rounded index=${i}">${i}</div>`;
     }
-    daysNames.innerHTML = calendarHTML;
-
-    calendarHTML = '';
-    for (let i = 1; i <= daysInMonth; i++) {
-        calendarHTML += `<div class="text-center w-7 py-2 border rounded">${i}</div>`;
-    }
-    daysNumbers.innerHTML = calendarHTML;
-
+    daysNames.innerHTML = calendarDaysNames;
+    daysNumbers.innerHTML = calendarDaysNumbers;
     renderHabits();
 }
 
@@ -63,7 +59,7 @@ function renderHabits() {
                             return `
                     <div class="relative group overflow-visible">
                       <input type="checkbox" index="${index}" data-day="${day}" ${isChecked ? 'checked' : ''
-                                } class="w-6 h-6 rounded border-gray-300">
+                                } class="w-7 h-6 rounded border-gray-300">
                       <div class="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 bg-gray-600 text-white text-xs px-2 py-1 rounded z-10 transition-opacity duration-300">
                         ${day}
                       </div>
