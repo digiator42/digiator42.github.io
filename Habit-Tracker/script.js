@@ -183,14 +183,38 @@ function clearCurrentMonth(event) {
 function editHabit(event) {
     const habitElement = event.target.closest('.p-4');
     const habitNameElement = habitElement.querySelector('h3');
-    const newHabitName = prompt('Edit habit name:', habitNameElement.textContent);
 
-    if (newHabitName) {
-        const habit = habits.find(h => h.name === habitNameElement.textContent);
-        habit.name = newHabitName;
-        saveHabits();
-        renderHabits();
-    }
+    const popup = document.createElement('div');
+    popup.innerHTML = `
+        <div class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+            <div class="bg-white p-6 rounded shadow-lg">
+                <h2 class="text-lg font-semibold mb-4">Edit Habit Name</h2>
+                <input type="text" id="editHabitInput" class="border p-2 w-full mb-4" placeholder="Enter habit name">
+                <div class="flex justify-end">
+                    <button id="cancelButton" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
+                    <button id="saveButton" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(popup);
+
+    document.getElementById('cancelButton').addEventListener('click', () => {
+        document.body.removeChild(popup);
+    });
+
+    document.getElementById('saveButton').addEventListener('click', () => {
+        const newHabitName = document.getElementById('editHabitInput').value;
+        console.log(habitNameElement);
+        if (newHabitName) {
+            const habit = habits.find(h => h.name === habitNameElement.textContent);
+            console.log(habit);
+            habit.name = newHabitName;
+            saveHabits();
+            renderHabits();
+            document.body.removeChild(popup);
+        }
+    });
 }
 
 renderCalendar(currentDate);
