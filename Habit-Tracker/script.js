@@ -9,6 +9,21 @@ const prevMonthButton = document.getElementById('prevMonth');
 const nextMonthButton = document.getElementById('nextMonth');
 const addHabitButton = document.getElementById('addHabit');
 
+function sanitizeInput(input) {
+    const substitutions = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#x27;',
+        '/': '&#x2F;'
+    };
+
+    substituted = input.replace(/[&<>"'/]/g, (match) => substitutions[match]);
+    console.log(substituted);
+    return substituted;
+}
+
 function createpopup(inputId, habitElementName, isAddHabit) {
     console.log(habitElementName);
     console.log(inputId);
@@ -43,6 +58,7 @@ function createpopup(inputId, habitElementName, isAddHabit) {
         if (newHabitName) {
             const habit = habits.find(h => h.name === habitElementName);
             console.log(habit);
+            console.log("--> ", habitElementName);
             habit.name = newHabitName;
             saveHabits();
             renderHabits();
@@ -82,46 +98,44 @@ function renderCalendar(date) {
     daysNumbers.innerHTML = calendarDaysNumbers;
     renderHabits();
 }
-
 function renderHabits() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth() + 1;
     habitsElement.innerHTML = habits
-        .map(
-            (habit, index) => `
-        <div class="p-4 bg-white rounded shadow">
-            <div class="flex justify-between items-center mb-4">
-          <h3 class="font-semibold mb-2">${habit.name}</h3>
-          <div class="flex justify-between items-center">
-          <button id="clearCurrentMonth" class="m-2" onclick="clearCurrentMonth(event)">❌</button>
-        <button id="editHabit" class="m-2" onclick="editHabit(event)">✏️</button>
-        </div>
-        </div>
-          <div class="grid grid-flow-col justify-between gap-1 w-full">
-            ${Array(new Date(year, month, 0).getDate())
-                    .fill()
-                    .map(
-                        (_, i) => {
-                            const day = i + 1;
-                            const isChecked = habit.days[year]?.[month]?.includes(day) || false;
-                            return `
-                    <div class="relative group overflow-visible z-11">
-                      <input type="checkbox" index="${index}" data-day="${day}" ${isChecked ? 'checked' : ''
-                                } class="w-7 h-6 rounded border-gray-300">
-                      <div class="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 bg-gray-600 text-white text-xs px-2 py-1 rounded z-10 transition-opacity duration-300 z-12">
-                        ${day}
-                      </div>
+        .map((habit, index) => {
+            const sanitizedHabitName = sanitizeInput(habit.name);
+            return `
+                <div class="p-4 bg-white rounded shadow">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-semibold mb-2">${sanitizedHabitName}</h3>
+                        <div class="flex justify-between items-center">
+                            <button id="clearCurrentMonth" class="m-2" onclick="clearCurrentMonth(event)">❌</button>
+                            <button id="editHabit" class="m-2" onclick="editHabit(event)">✏️</button>
+                        </div>
                     </div>
-                  `;
-                        }
-                    )
-                    .join('')}
-          </div>
-        </div>
-      `
-        )
+                    <div class="grid grid-flow-col justify-between gap-1 w-full">
+                        ${Array(new Date(year, month, 0).getDate())
+                            .fill()
+                            .map((_, i) => {
+                                const day = i + 1;
+                                const isChecked = habit.days[year]?.[month]?.includes(day) || false;
+                                return `
+                                    <div class="relative group overflow-visible z-11">
+                                        <input type="checkbox" index="${index}" data-day="${day}" ${isChecked ? 'checked' : ''} class="w-7 h-6 rounded border-gray-300">
+                                        <div class="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 bg-gray-600 text-white text-xs px-2 py-1 rounded z-10 transition-opacity duration-300 z-12">
+                                            ${day}
+                                        </div>
+                                    </div>
+                                `;
+                            })
+                            .join('')}
+                    </div>
+                </div>
+            `;
+        })
         .join('');
 }
+
 
 function addHabit(name) {
     habits.push({ name, days: {} });
