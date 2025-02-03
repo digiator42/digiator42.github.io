@@ -50,7 +50,10 @@ function renderHabits() {
         <div class="p-4 bg-white rounded shadow">
             <div class="flex justify-between items-center mb-4">
           <h3 class="font-semibold mb-2">${habit.name}</h3>
+          <div class="flex justify-between items-center">
           <button id="clearCurrentMonth" class="m-2" onclick="clearCurrentMonth(event)">❌</button>
+        <button id="editHabit" class="m-2" onclick="editHabit(event)">✏️</button>
+        </div>
         </div>
           <div class="grid grid-flow-col justify-between gap-1 w-full">
             ${Array(new Date(year, month, 0).getDate())
@@ -175,6 +178,19 @@ function clearCurrentMonth(event) {
 
     saveHabits();
     renderHabits();
+}
+
+function editHabit(event) {
+    const habitElement = event.target.closest('.p-4');
+    const habitNameElement = habitElement.querySelector('h3');
+    const newHabitName = prompt('Edit habit name:', habitNameElement.textContent);
+
+    if (newHabitName) {
+        const habit = habits.find(h => h.name === habitNameElement.textContent);
+        habit.name = newHabitName;
+        saveHabits();
+        renderHabits();
+    }
 }
 
 renderCalendar(currentDate);
