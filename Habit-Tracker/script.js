@@ -27,12 +27,17 @@ function sanitizeInput(input) {
 function createpopup(inputId, habitElementName, isAddHabit) {
     console.log(habitElementName);
     console.log(inputId);
+    if (document.getElementById('popup')) {
+        return;
+    }
     const popup = document.createElement('div');
+    popup.id = 'popup';
     popup.innerHTML = `
         <div class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
             <div class="bg-white p-6 rounded shadow-lg">
                 <h2 class="text-lg font-semibold mb-4">${isAddHabit ? "Add" : "Edit"} Habit Name</h2>
                 <input type="text" id="${inputId}" class="border p-2 w-full mb-4" placeholder="Enter habit name">
+                <p class="text-xs text-red-500 mb-4" id="duplicateHabitName"></p>
                 <div class="flex justify-end">
                     <button id="cancelButton" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
                     <button id="saveButton" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
@@ -49,21 +54,29 @@ function createpopup(inputId, habitElementName, isAddHabit) {
     document.getElementById('saveButton').addEventListener('click', () => {
         const newHabitName = document.getElementById(inputId).value.trim();
         console.log(`"${newHabitName}"`);
+        dublicateHabitNameError = document.getElementById('duplicateHabitName');
+        if (newHabitName.length > 25) {
+            dublicateHabitNameError.innerHTML = 'Habit name is too long 🤷';
+            return;
+        }
+
+        const habitExists = habits.find(h => h.name === newHabitName);
+        if (habitExists) {
+            console.log('Habit already exists');
+            dublicateHabitNameError.innerHTML = 'Habit already exists 🤷‍♂️';
+            return;
+        }
 
         if (isAddHabit && newHabitName) {
             addHabit(newHabitName);
-            document.body.removeChild(popup);
-            return;
-        }
-        if (newHabitName) {
+        } else if (newHabitName) {
             const habit = habits.find(h => h.name === habitElementName);
-            console.log(habit);
-            console.log("--> ", habitElementName);
             habit.name = newHabitName;
             saveHabits();
             renderHabits();
-            document.body.removeChild(popup);
         }
+
+        document.body.removeChild(popup);
     });
 }
 
@@ -109,7 +122,7 @@ function renderHabits() {
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="font-semibold mb-2">${sanitizedHabitName}</h3>
                         <div class="flex justify-between items-center">
-                            <button id="clearCurrentMonth" class="m-2" onclick="clearCurrentMonth(event)">❌</button>
+                            <button id="deleteHabit" class="m-2" onclick="deleteHabit(event)">❌</button>
                             <button id="editHabit" class="m-2" onclick="editHabit(event)">✏️</button>
                         </div>
                     </div>
@@ -120,13 +133,13 @@ function renderHabits() {
                                 const day = i + 1;
                                 const isChecked = habit.days[year]?.[month]?.includes(day) || false;
                                 return `
-                                    <div class="relative group overflow-visible z-11">
-                                        <input type="checkbox" index="${index}" data-day="${day}" ${isChecked ? 'checked' : ''} class="w-7 h-6 rounded border-gray-300">
-                                        <div class="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 bg-gray-600 text-white text-xs px-2 py-1 rounded z-10 transition-opacity duration-300 z-12">
-                                            ${day}
-                                        </div>
-                                    </div>
-                                `;
+                                            <div class="relative group overflow-visible z-11">
+                                                <input type="checkbox" index="${index}" data-day="${day}" ${isChecked ? 'checked' : ''} class="w-7 h-6 rounded border-gray-300">
+                                                <div class="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 bg-gray-600 text-white text-xs px-2 py-1 rounded z-10 transition-opacity duration-300 z-12">
+                                                    ${day}
+                                                </div>
+                                            </div>
+                                        `;
                             })
                             .join('')}
                     </div>
@@ -197,12 +210,12 @@ document.getElementById('clearData').addEventListener('click', () => {
     renderHabits();
 });
 
-function clearCurrentMonth(event) {
+function deleteHabit(event) {
     const habitElement = event.target.closest('.p-4');
     const habitNameElement = habitElement.querySelector('h3');
 
     habits = habits.filter(h => h.name !== habitNameElement.textContent);
-    delete habits[habitNameElement.textContent];
+    console.log(habits);
 
     saveHabits();
     renderHabits();
