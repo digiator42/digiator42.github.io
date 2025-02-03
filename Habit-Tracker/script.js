@@ -9,6 +9,48 @@ const prevMonthButton = document.getElementById('prevMonth');
 const nextMonthButton = document.getElementById('nextMonth');
 const addHabitButton = document.getElementById('addHabit');
 
+function createpopup(inputId, habitElementName, isAddHabit) {
+    console.log(habitElementName);
+    console.log(inputId);
+    const popup = document.createElement('div');
+    popup.innerHTML = `
+        <div class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+            <div class="bg-white p-6 rounded shadow-lg">
+                <h2 class="text-lg font-semibold mb-4">${isAddHabit ? "Add" : "Edit"} Habit Name</h2>
+                <input type="text" id="${inputId}" class="border p-2 w-full mb-4" placeholder="Enter habit name">
+                <div class="flex justify-end">
+                    <button id="cancelButton" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
+                    <button id="saveButton" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(popup);
+
+    document.getElementById('cancelButton').addEventListener('click', () => {
+        document.body.removeChild(popup);
+    });
+
+    document.getElementById('saveButton').addEventListener('click', () => {
+        const newHabitName = document.getElementById(inputId).value.trim();
+        console.log(`"${newHabitName}"`);
+
+        if (isAddHabit && newHabitName) {
+            addHabit(newHabitName);
+            document.body.removeChild(popup);
+            return;
+        }
+        if (newHabitName) {
+            const habit = habits.find(h => h.name === habitElementName);
+            console.log(habit);
+            habit.name = newHabitName;
+            saveHabits();
+            renderHabits();
+            document.body.removeChild(popup);
+        }
+    });
+}
+
 function saveHabits() {
     localStorage.setItem('habits', JSON.stringify(habits));
 }
@@ -123,35 +165,7 @@ nextMonthButton.addEventListener('click', () => {
 });
 
 addHabitButton.addEventListener('click', () => {
-    const habitElement = document.createElement('div');
-    habitElement.innerHTML = `
-        <div class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-            <div class="bg-white p-6 rounded shadow-lg">
-                <h2 class="text-lg font-semibold mb-4">Add New Habit</h2>
-                <input type="text" id="newHabit" class="border p-2 w-full mb-4" placeholder="Enter habit name">
-                <div class="flex justify-end">
-                    <button id="cancelButton" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
-                    <button id="saveButton" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
-                </div>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(habitElement);
-
-    document.getElementById('cancelButton').addEventListener('click', () => {
-        document.body.removeChild(habitElement);
-    });
-
-    document.getElementById('saveButton').addEventListener('click', () => {
-        const habitName = document.getElementById('newHabit').value;
-        if (habitName) {
-            addHabit(habitName);
-            document.body.removeChild(habitElement);
-        }
-    });
-    if (habitElement) {
-        addHabit(habitName);
-    }
+    createpopup('addHabitInput', null, true);
 });
 
 habitsElement.addEventListener('change', (e) => {
@@ -184,37 +198,7 @@ function editHabit(event) {
     const habitElement = event.target.closest('.p-4');
     const habitNameElement = habitElement.querySelector('h3');
 
-    const popup = document.createElement('div');
-    popup.innerHTML = `
-        <div class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-            <div class="bg-white p-6 rounded shadow-lg">
-                <h2 class="text-lg font-semibold mb-4">Edit Habit Name</h2>
-                <input type="text" id="editHabitInput" class="border p-2 w-full mb-4" placeholder="Enter habit name">
-                <div class="flex justify-end">
-                    <button id="cancelButton" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
-                    <button id="saveButton" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
-                </div>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(popup);
-
-    document.getElementById('cancelButton').addEventListener('click', () => {
-        document.body.removeChild(popup);
-    });
-
-    document.getElementById('saveButton').addEventListener('click', () => {
-        const newHabitName = document.getElementById('editHabitInput').value;
-        console.log(habitNameElement);
-        if (newHabitName) {
-            const habit = habits.find(h => h.name === habitNameElement.textContent);
-            console.log(habit);
-            habit.name = newHabitName;
-            saveHabits();
-            renderHabits();
-            document.body.removeChild(popup);
-        }
-    });
+    createpopup('editHabitInput', habitNameElement.textContent);
 }
 
 renderCalendar(currentDate);
