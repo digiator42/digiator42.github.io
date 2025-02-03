@@ -48,7 +48,10 @@ function renderHabits() {
         .map(
             (habit, index) => `
         <div class="p-4 bg-white rounded shadow">
+            <div class="flex justify-between items-center mb-4">
           <h3 class="font-semibold mb-2">${habit.name}</h3>
+          <button id="clearCurrentMonth" class="m-2" onclick="clearCurrentMonth(event)">❌</button>
+        </div>
           <div class="grid grid-flow-col gap-2 w-full">
             ${Array(new Date(year, month, 0).getDate())
                     .fill()
@@ -128,6 +131,7 @@ addHabitButton.addEventListener('click', () => {
                     <button id="saveButton" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
                 </div>
             </div>
+
         </div>
     `;
     document.body.appendChild(habitElement);
@@ -156,5 +160,22 @@ habitsElement.addEventListener('change', (e) => {
         toggleHabitDay(habitIndex, day);
     }
 });
+
+document.getElementById('clearData').addEventListener('click', () => {
+    localStorage.removeItem('habits');
+    habits = [];
+    renderHabits();
+});
+
+function clearCurrentMonth(event) {
+    const habitElement = event.target.closest('.p-4');
+    const habitNameElement = habitElement.querySelector('h3');
+
+    habits = habits.filter(h => h.name !== habitNameElement.textContent);
+    delete habits[habitNameElement.textContent];
+
+    saveHabits();
+    renderHabits();
+}
 
 renderCalendar(currentDate);
