@@ -8,8 +8,8 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
-<body class="bg-gray-100 p-8">
-    <div class="max-w-4xl mx-auto">
+<body class="bg-gray-100 p-8 w-4/5 mx-auto"></body>
+    <div class="max-w-full mx-auto">
 
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-3xl font-bold">Habit Tracker</h1>
@@ -25,7 +25,12 @@
 
         <!-- Calendar -->
         <div class="overflow-x-auto">
-            <div id="calendar" class="grid grid-flow-col gap-1.2 px-4 mb-4 w-full"></div>
+            <div id="calendar" class="grid grid-flow-row gap-1.2 px-4 mb-4 w-full">
+                <!-- Days of the month -->
+                <div class="grid grid-flow-col gap-2 text-center text-sm" id="daysNames"></div>
+                <!-- Days of the week -->
+                <div class="grid grid-flow-col gap-2 text-center" id="daysNumbers"></div>
+            </div>
             <div id="habits" class="space-y-4"></div>
         </div>
 
