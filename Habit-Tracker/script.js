@@ -104,8 +104,8 @@ function renderCalendar(date) {
     let calendarDaysNumbers = '';
     for (let i = 1; i <= daysInMonth; i++) {
         const dayName = new Date(year, month, i).toLocaleString('default', { weekday: 'short' });
-        calendarDaysNames += `<div class="text-xs text-center w-8 py-2 border rounded">${dayName}</div>`;
-        calendarDaysNumbers += `<div class="text-sm text-center w-8 py-2 border rounded index=${i}">${i}</div>`;
+        calendarDaysNames += `<div class="text-xs text-center w-11 py-2 border rounded">${dayName}</div>`;
+        calendarDaysNumbers += `<div class="text-sm text-center w-11 py-2 border rounded index=${i}">${i}</div>`;
     }
     daysNames.innerHTML = calendarDaysNames;
     daysNumbers.innerHTML = calendarDaysNumbers;
@@ -114,6 +114,7 @@ function renderCalendar(date) {
 function renderHabits() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth() + 1;
+    console.log('--> ', month);
     habitsElement.innerHTML = habits
         .map((habit, index) => {
             const sanitizedHabitName = sanitizeInput(habit.name);
@@ -126,20 +127,20 @@ function renderHabits() {
                             <button id="editHabit" class="m-2" onclick="editHabit(event)">✏️</button>
                         </div>
                     </div>
-                    <div class="grid grid-flow-col justify-between gap-1 w-full">
+                    <div class="grid grid-flow-col justify-between gap-1 max-w-full min-w-0">
                         ${Array(new Date(year, month, 0).getDate())
                             .fill()
                             .map((_, i) => {
                                 const day = i + 1;
                                 const isChecked = habit.days[year]?.[month]?.includes(day) || false;
                                 return `
-                                            <div class="relative group overflow-visible z-11">
-                                                <input type="checkbox" index="${index}" data-day="${day}" ${isChecked ? 'checked' : ''} class="w-7 h-6 rounded border-gray-300">
-                                                <div class="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 bg-gray-600 text-white text-xs px-2 py-1 rounded z-10 transition-opacity duration-300 z-12">
-                                                    ${day}
-                                                </div>
-                                            </div>
-                                        `;
+                                    <div class="relative group flex-wrap min-w-0 z-11">
+                                        <input type="checkbox" index="${index}" data-day="${day}" ${isChecked ? 'checked' : ''} class="w-10 h-10 max-w-full min-w-0 mt-0 border-gray-300">
+                                        <div class="absolute bottom-full mb-1 w-10 opacity-0 group-hover:opacity-100 bg-gray-600 text-white text-xs text-center py-1 max-w-full min-w-0 rounded transition-opacity duration-300 z-14">
+                                            ${day}
+                                        </div>
+                                    </div>
+                                `;
                             })
                             .join('')}
                     </div>
