@@ -117,11 +117,13 @@ function renderHabits() {
     console.log('--> ', month);
     habitsElement.innerHTML = habits
         .map((habit, index) => {
+            const habitDays = habit.days[year]?.[month] || [];
             const sanitizedHabitName = sanitizeInput(habit.name);
             return `
                 <div class="p-4 bg-white rounded shadow">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="font-semibold mb-2">${sanitizedHabitName}</h3>
+                        <div class="text-sm text-gray-600">Achieved: ${habitDays.length}</div>
                         <div class="flex justify-between items-center">
                             <button id="deleteHabit" class="m-2" onclick="deleteHabit(event)">❌</button>
                             <button id="editHabit" class="m-2" onclick="editHabit(event)">✏️</button>
@@ -132,7 +134,7 @@ function renderHabits() {
                             .fill()
                             .map((_, i) => {
                                 const day = i + 1;
-                                const isChecked = habit.days[year]?.[month]?.includes(day) || false;
+                                const isChecked = habitDays.includes(day);
                                 return `
                                     <div class="relative group flex-wrap min-w-0 z-11">
                                         <input type="checkbox" index="${index}" data-day="${day}" ${isChecked ? 'checked' : ''} class="w-10 h-10 max-w-full min-w-0 mt-0 border-gray-300">
@@ -202,6 +204,7 @@ habitsElement.addEventListener('change', (e) => {
         const habitIndex = parseInt(e.target.getAttribute('index'));
         const day = parseInt(e.target.getAttribute('data-day'));
         toggleHabitDay(habitIndex, day);
+        renderHabits();
     }
 });
 
