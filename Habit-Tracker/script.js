@@ -24,9 +24,7 @@ function sanitizeInput(input) {
     return substituted;
 }
 
-function createpopup(inputId, habitElementName, isAddHabit) {
-    console.log(habitElementName);
-    console.log(inputId);
+function createpopup(inputId, habitElementName, isAddHabit = false) {
     if (document.getElementById('popup')) {
         return;
     }
@@ -34,10 +32,12 @@ function createpopup(inputId, habitElementName, isAddHabit) {
     popup.id = 'popup';
     popup.innerHTML = `
         <div class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-            <div class="bg-white p-6 rounded shadow-lg">
-                <h2 class="text-lg font-semibold mb-4">${isAddHabit ? "Add" : "Edit"} Habit Name</h2>
+            <div class="bg-white px-16 py-4 rounded shadow-lg">
+                <h2 class="text-lg font-semibold mb-2">${isAddHabit ? "Add Habit Name*" : "Edit Habit Name"}</h2>
                 <input type="text" id="${inputId}" class="border p-2 w-full mb-4" placeholder="Enter habit name">
-                <p class="text-xs text-red-500 mb-4" id="duplicateHabitName"></p>
+                <h2 class="text-lg font-semibold mb-2">Target</h2>
+                <input type="text" id="${inputId + 'Target'}" class="border p-2 w-1/2 mb-4" placeholder="Enter target">
+                <p class="text-xs text-red-500 mb-4" id="error"></p>
                 <div class="flex justify-end">
                     <button id="cancelButton" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
                     <button id="saveButton" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
@@ -53,25 +53,37 @@ function createpopup(inputId, habitElementName, isAddHabit) {
 
     document.getElementById('saveButton').addEventListener('click', () => {
         const newHabitName = document.getElementById(inputId).value.trim();
+        const newHabitTarget = document.getElementById(`${inputId}` + 'Target').value.trim();
         console.log(`"${newHabitName}"`);
-        dublicateHabitNameError = document.getElementById('duplicateHabitName');
+        errorText = document.getElementById('error');
+        
         if (newHabitName.length > 25) {
-            dublicateHabitNameError.innerHTML = 'Habit name is too long 🤷';
+            errorText.innerHTML = 'Habit name is too long';
             return;
         }
 
         const habitExists = habits.find(h => h.name === newHabitName);
         if (habitExists) {
-            console.log('Habit already exists');
             dublicateHabitNameError.innerHTML = 'Habit already exists 🤷‍♂️';
             return;
         }
 
-        if (isAddHabit && newHabitName) {
-            addHabit(newHabitName);
-        } else if (newHabitName) {
-            const habit = habits.find(h => h.name === habitElementName);
-            habit.name = newHabitName;
+        const maxDaysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+        if (parseInt(newHabitTarget) > maxDaysInMonth) {
+            errorText.innerHTML = `Target cannot be more than ${maxDaysInMonth} days`;
+            return;
+        }
+
+        const habit = habits.find(h => h.name === habitElementName);
+        if (!habit) {
+            if (!newHabitName) {
+                errorText.innerHTML = 'Habit name is required 🤷';
+                return;
+            }
+            addHabit(newHabitName, parseInt(newHabitTarget) || 0);
+        } else {
+            newHabitName && (habit.name = newHabitName);
+            parseInt(newHabitTarget) && (habit.target = newHabitTarget);
             saveHabits();
             renderHabits();
         }
@@ -121,9 +133,12 @@ function renderHabits() {
             const sanitizedHabitName = sanitizeInput(habit.name);
             return `
                 <div class="p-4 bg-white rounded shadow">
-                    <div class="flex justify-between items-center mb-4">
+                    <div class="flex relative justify-between items-center mb-4">
                         <h3 class="font-semibold mb-2">${sanitizedHabitName}</h3>
-                        <div class="text-sm text-gray-600">Achieved: ${habitDays.length}</div>
+                        <div class="flex absolute gap-1 left-1/2 transform -translate-x-1/2">
+                            <p class="text-xm text-gray-600">Achieved: ${habitDays.length} |</p>
+                            <p class="text-xm text-gray-600">Target: ${habit.target}</p>
+                        </div>
                         <div class="flex justify-between items-center">
                             <button id="deleteHabit" class="m-2" onclick="deleteHabit(event)">❌</button>
                             <button id="editHabit" class="m-2" onclick="editHabit(event)">✏️</button>
@@ -153,8 +168,8 @@ function renderHabits() {
 }
 
 
-function addHabit(name) {
-    habits.push({ name, days: {} });
+function addHabit(name, target) {
+    habits.push({ name, days: {}, target});
     saveHabits();
     renderHabits();
 }
