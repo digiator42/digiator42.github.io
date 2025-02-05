@@ -273,8 +273,8 @@ document.getElementById('clearNotes').addEventListener('click', () => {
 });
 
 document.getElementById('exportData').addEventListener('click', () => {
-    const dataStr = JSON.stringify(habits, null, 4);
-    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+    const combinedDataStr = JSON.stringify({ habits, notes }, null, 4);
+    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(combinedDataStr); 
 
     const filename = 'habits.json';
 
@@ -292,10 +292,13 @@ document.getElementById('importData').addEventListener('change', (event) => {
         reader.onload = (e) => {
             try {
                 const importedData = JSON.parse(e.target.result);
-                if (Array.isArray(importedData)) {
-                    habits = importedData;
+                habits = importedData['habits'];
+                notes = importedData['notes'];
+                if (Array.isArray(habits) || Array.isArray(notes)) {
                     saveHabits();
+                    saveNotes();
                     renderHabits();
+                    renderNotes();
                 } else {
                     alert('Invalid data format');
                 }
