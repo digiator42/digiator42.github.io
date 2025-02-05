@@ -1,6 +1,7 @@
 
 let currentDate = new Date();
 let habits = loadHabits();
+let notes = loadNotes();
 
 const currentMonthElement = document.getElementById('currentMonth');
 const calendarElement = document.getElementById('calendar');
@@ -56,7 +57,7 @@ function createpopup(inputId, habitElementName, isAddHabit = false) {
         const newHabitTarget = document.getElementById(`${inputId}` + 'Target').value.trim();
         console.log(`"${newHabitName}"`);
         errorText = document.getElementById('error');
-        
+
         if (newHabitName.length > 25) {
             errorText.innerHTML = 'Habit name is too long';
             return;
@@ -95,10 +96,18 @@ function createpopup(inputId, habitElementName, isAddHabit = false) {
 function saveHabits() {
     localStorage.setItem('habits', JSON.stringify(habits));
 }
+function saveNotes() {
+    localStorage.setItem('notes', JSON.stringify(notes));
+}
 
 function loadHabits() {
     const habitsData = localStorage.getItem('habits');
     return habitsData ? JSON.parse(habitsData) : [];
+}
+
+function loadNotes() {
+    const notesData = localStorage.getItem('notes');
+    return notesData ? JSON.parse(notesData) : [];
 }
 
 function renderCalendar(date) {
@@ -161,13 +170,13 @@ function renderHabits() {
                                 const day = i + 1;
                                 const isChecked = habitDays.includes(day);
                                 return `
-                                    <div class="relative group flex-wrap min-w-0 z-11">
-                                        <input type="checkbox" index="${index}" data-day="${day}" ${isChecked ? 'checked' : ''} class="w-10 h-10 max-w-full min-w-0 mt-0 border-gray-300">
-                                        <div class="absolute bottom-full mb-1 w-10 opacity-0 group-hover:opacity-100 bg-gray-600 text-white text-xs text-center py-1 max-w-full min-w-0 rounded transition-opacity duration-300 z-14">
-                                            ${day}
-                                        </div>
-                                    </div>
-                                `;
+                                            <div class="relative group flex-wrap min-w-0 z-11">
+                                                <input type="checkbox" index="${index}" data-day="${day}" ${isChecked ? 'checked' : ''} class="w-10 h-10 max-w-full min-w-0 mt-0 border-gray-300">
+                                                <div class="absolute bottom-full mb-1 w-10 opacity-0 group-hover:opacity-100 bg-gray-600 text-white text-xs text-center py-1 max-w-full min-w-0 rounded transition-opacity duration-300 z-14">
+                                                    ${day}
+                                                </div>
+                                            </div>
+                                        `;
                             })
                             .join('')}
                     </div>
@@ -179,7 +188,7 @@ function renderHabits() {
 
 
 function addHabit(name, target) {
-    habits.push({ name, days: {}, target});
+    habits.push({ name, days: {}, target });
     saveHabits();
     renderHabits();
 }
@@ -232,10 +241,16 @@ habitsElement.addEventListener('change', (e) => {
     }
 });
 
-document.getElementById('clearData').addEventListener('click', () => {
+document.getElementById('clearHabits').addEventListener('click', () => {
     localStorage.removeItem('habits');
     habits = [];
     renderHabits();
+});
+
+document.getElementById('clearNotes').addEventListener('click', () => {
+    localStorage.removeItem('notes');
+    notes = [];
+    renderNotes();
 });
 
 function deleteHabit(event) {
@@ -293,4 +308,21 @@ function editHabit(event) {
     createpopup('editHabitInput', habitNameElement.textContent);
 }
 
+document.getElementById('saveNotes').addEventListener('click', () => {
+    const notesInput = document.getElementById('notesInput').value.trim();
+    console.log("-> ", notesInput);
+    if (notesInput) {
+        notes.push(notesInput);
+        saveNotes();
+        renderNotes();
+        document.getElementById('notesInput').value = '';
+    }
+});
+
+function renderNotes() {
+    const notesElement = document.getElementById('notes');
+    notesElement.innerHTML = notes.map(note => `<div class="w-full p-4 border rounded-lg mb-2">${sanitizeInput(note)}</div>`).join('');
+}
+
 renderCalendar(currentDate);
+renderNotes();
