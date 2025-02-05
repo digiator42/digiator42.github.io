@@ -107,7 +107,6 @@ function renderCalendar(date) {
     const lastDay = new Date(year, month + 1, 0);
     const daysInMonth = lastDay.getDate();
 
-    console.log(daysInMonth)
     let daysNames = document.getElementById('days-names');
     let daysNumbers = document.getElementById('days-numbers');
 
@@ -126,7 +125,6 @@ function renderCalendar(date) {
 function renderHabits() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth() + 1;
-    console.log('--> ', month);
     habitsElement.innerHTML = habits
         .map((habit, index) => {
             const habitDays = habit.days[year]?.[month] || [];
@@ -136,8 +134,20 @@ function renderHabits() {
                     <div class="flex relative justify-between items-center mb-4">
                         <h3 class="font-semibold mb-2">${sanitizedHabitName}</h3>
                         <div class="flex absolute gap-1 left-1/2 transform -translate-x-1/2">
-                            <p class="text-xm text-gray-600">Achieved: ${habitDays.length} |</p>
-                            <p class="text-xm text-gray-600">Target: ${habit.target}</p>
+                            <div class="flex flex-col items-center gap-1">
+                                <p id="achievedText" class="text-xm ">Achieved</p>
+                                <div class="flex items-center gap-1">
+                                <p id="achievedTarget" class="text-xm text-gray-600">${habitDays.length >= habit.target ? '✅' : ''}</p>
+                                <p id="achieved" class="text-xm text-gray-600">${habitDays.length}</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-center mx-3">
+                                <div class="border-l-2 border-gray-500 h-full"></div>
+                            </div>
+                            <div class="flex flex-col items-center gap-1">
+                                <p id="target" class="text-xm text-gray-600">Target</p>
+                                <p id="target" class="text-xm text-gray-600">${habit.target}</p>
+                            </div>
                         </div>
                         <div class="flex justify-between items-center">
                             <button id="deleteHabit" class="m-2" onclick="deleteHabit(event)">❌</button>
@@ -174,9 +184,8 @@ function addHabit(name, target) {
     renderHabits();
 }
 
-function toggleHabitDay(habitIndex, day) {
+function updateHabit(habitIndex, day) {
     const habit = habits[habitIndex];
-    console.log(habit);
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth() + 1;
 
@@ -214,11 +223,11 @@ addHabitButton.addEventListener('click', () => {
 });
 
 habitsElement.addEventListener('change', (e) => {
+    console.log(e.target.tagName);
     if (e.target.tagName === 'INPUT') {
-        console.log(e.target.tagName);
         const habitIndex = parseInt(e.target.getAttribute('index'));
         const day = parseInt(e.target.getAttribute('data-day'));
-        toggleHabitDay(habitIndex, day);
+        updateHabit(habitIndex, day);
         renderHabits();
     }
 });
