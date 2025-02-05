@@ -32,7 +32,14 @@
         </div>
     </div>
     <div id="habits" class="space-y-4 overflow-x-auto"></div>
-    <button id="clearData" class="bg-red-500 text-white mt-3 px-4 py-2 rounded">Clear Habits</button>
+    <div class="flex flex-row justify-between items-center">
+        <button id="clearData" class="bg-red-500 text-white mt-3 px-4 py-2 rounded">Clear Habits</button>
+        <div class="flex flex-row justify-between items-center gap-3">
+            <label for="importData" class="bg-green-500 text-white mt-3 px-4 py-2 rounded cursor-pointer">Import Habits</label>
+            <input type="file" id="importData" class="hidden" accept=".json">
+            <button id="exportData" class="bg-gray-500 text-white mt-3 px-4 py-2 rounded">Export Habits</button>
+        </div>
+    </div>
 
 </div>
 

@@ -249,6 +249,43 @@ function deleteHabit(event) {
     renderHabits();
 }
 
+document.getElementById('exportData').addEventListener('click', () => {
+    const dataStr = JSON.stringify(habits, null, 4);
+    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+
+    const filename = 'habits.json';
+
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', filename);
+    linkElement.click();
+    linkElement.remove();
+});
+
+document.getElementById('importData').addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file && file.type === 'application/json') {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const importedData = JSON.parse(e.target.result);
+                if (Array.isArray(importedData)) {
+                    habits = importedData;
+                    saveHabits();
+                    renderHabits();
+                } else {
+                    alert('Invalid data format');
+                }
+            } catch (error) {
+                alert('Error parsing JSON data');
+            }
+        };
+        reader.readAsText(file);
+    } else {
+        alert('Please upload a valid JSON file');
+    }
+});
+
 function editHabit(event) {
     const habitElement = event.target.closest('.p-4');
     const habitNameElement = habitElement.querySelector('h3');
