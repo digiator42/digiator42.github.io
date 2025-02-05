@@ -1,14 +1,20 @@
-
-let currentDate = new Date();
-let habits = loadHabits();
-let notes = loadNotes();
-
 const currentMonthElement = document.getElementById('currentMonth');
 const calendarElement = document.getElementById('calendar');
 const habitsElement = document.getElementById('habits');
 const prevMonthButton = document.getElementById('prevMonth');
 const nextMonthButton = document.getElementById('nextMonth');
 const addHabitButton = document.getElementById('addHabit');
+
+const randomHabits = [
+    "Get out of bed before noon",
+    "Shower at least once a week",
+    "Do something instead of nothing",
+    "Clean my room once a month",
+];
+
+let currentDate = new Date();
+let habits = loadHabits();
+let notes = loadNotes();
 
 function sanitizeInput(input) {
     const substitutions = {
@@ -21,7 +27,6 @@ function sanitizeInput(input) {
     };
 
     substituted = input.replace(/[&<>"'/]/g, (match) => substitutions[match]);
-    console.log(substituted);
     return substituted;
 }
 
@@ -74,7 +79,6 @@ function createpopup(inputId, habitElementName, isAddHabit = false) {
     document.getElementById('saveButton').addEventListener('click', () => {
         const newHabitName = document.getElementById(inputId).value.trim();
         const newHabitTarget = document.getElementById(`${inputId}` + 'Target').value.trim();
-        console.log(`"${newHabitName}"`);
         errorText = document.getElementById('error');
 
         if (newHabitName.length > 25) {
@@ -156,7 +160,11 @@ function renderHabits() {
     habitsElement.innerHTML = habits
         .map((habit, index) => {
             const habitDays = habit.days[year]?.[month] || [];
+            if (!habit.name) {
+                habit.name = randomHabits[Math.floor(Math.random() * randomHabits.length)];
+            }
             const sanitizedHabitName = sanitizeInput(habit.name);
+            const target = habit.target || 0;
             return `
                 <div class="p-4 bg-white rounded shadow">
                     <div class="flex relative justify-between items-center mb-4">
@@ -165,7 +173,7 @@ function renderHabits() {
                             <div class="flex flex-col items-center gap-1">
                                 <p id="achievedText" class="text-xm ">Achieved</p>
                                 <div class="flex items-center gap-1">
-                                <p id="achievedTarget" class="text-xm text-gray-600">${habitDays.length >= habit.target ? '✅' : ''}</p>
+                                <p id="achievedTarget" class="text-xm text-gray-600">${habitDays.length >= target ? '✅' : ''}</p>
                                 <p id="achieved" class="text-xm text-gray-600">${habitDays.length}</p>
                                 </div>
                             </div>
@@ -174,7 +182,7 @@ function renderHabits() {
                             </div>
                             <div class="flex flex-col items-center gap-1">
                                 <p id="target" class="text-xm text-gray-600">Target</p>
-                                <p id="target" class="text-xm text-gray-600">${habit.target}</p>
+                                <p id="target" class="text-xm text-gray-600">${target}</p>
                             </div>
                         </div>
                         <div class="flex justify-between items-center">
@@ -189,13 +197,13 @@ function renderHabits() {
                                 const day = i + 1;
                                 const isChecked = habitDays.includes(day);
                                 return `
-                                            <div class="relative group flex-wrap min-w-0 z-11">
-                                                <input type="checkbox" index="${index}" data-day="${day}" ${isChecked ? 'checked' : ''} class="w-10 h-10 max-w-full min-w-0 mt-0 border-gray-300">
-                                                <div class="absolute bottom-full mb-1 w-10 opacity-0 group-hover:opacity-100 bg-gray-600 text-white text-xs text-center py-1 max-w-full min-w-0 rounded transition-opacity duration-300 z-14">
-                                                    ${day}
-                                                </div>
-                                            </div>
-                                        `;
+                                    <div class="relative group flex-wrap min-w-0 z-11">
+                                        <input type="checkbox" index="${index}" data-day="${day}" ${isChecked ? 'checked' : ''} class="w-10 h-10 max-w-full min-w-0 mt-0 border-gray-300">
+                                        <div class="absolute bottom-full mb-1 w-10 opacity-0 group-hover:opacity-100 bg-gray-600 text-white text-xs text-center py-1 max-w-full min-w-0 rounded transition-opacity duration-300 z-14">
+                                            ${day}
+                                        </div>
+                                    </div>
+                                `;
                             })
                             .join('')}
                     </div>
@@ -217,11 +225,12 @@ function updateHabit(habitIndex, day) {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth() + 1;
 
-
+    if (habit.days[year] === undefined) {
+        habit.days = {};
+    }
     if (!habit.days[year]) {
         habit.days[year] = {};
     }
-
     if (!habit.days[year][month]) {
         habit.days[year][month] = [];
     }
@@ -251,7 +260,6 @@ addHabitButton.addEventListener('click', () => {
 });
 
 habitsElement.addEventListener('change', (e) => {
-    console.log(e.target.tagName);
     if (e.target.tagName === 'INPUT') {
         const habitIndex = parseInt(e.target.getAttribute('index'));
         const day = parseInt(e.target.getAttribute('data-day'));
@@ -274,7 +282,7 @@ document.getElementById('clearNotes').addEventListener('click', () => {
 
 document.getElementById('exportData').addEventListener('click', () => {
     const combinedDataStr = JSON.stringify({ habits, notes }, null, 4);
-    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(combinedDataStr); 
+    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(combinedDataStr);
 
     const filename = 'habits.json';
 
@@ -310,6 +318,7 @@ document.getElementById('importData').addEventListener('change', (event) => {
     } else {
         alert('Please upload a valid JSON file');
     }
+    event.target.value = '';
 });
 
 function deleteHabit(event) {
@@ -317,7 +326,6 @@ function deleteHabit(event) {
     const habitNameElement = habitElement.querySelector('h3');
 
     habits = habits.filter(h => h.name !== habitNameElement.textContent);
-    console.log(habits);
 
     saveHabits();
     renderHabits();
@@ -332,12 +340,13 @@ function editHabit(event) {
 
 function deleteNote(event) {
     const noteElement = event.target.closest('.p-4');
-    console.log(noteElement);
     const noteNameElement = noteElement.querySelector('p');
-
-    notes.splice(notes.indexOf(noteNameElement.textContent), 1);
-    saveNotes();
-    renderNotes();
+    const index = notes.indexOf(noteNameElement.textContent);
+    if (index !== -1) {
+        notes.splice(notes.indexOf(noteNameElement.textContent), 1);
+        saveNotes();
+        renderNotes();
+    }
 }
 
 function editNote(event) {
@@ -349,7 +358,6 @@ function editNote(event) {
 
 document.getElementById('saveNotes').addEventListener('click', () => {
     const notesInput = document.getElementById('notesInput').value.trim();
-    console.log("-> ", notesInput);
     if (notesInput) {
         notes.push(notesInput);
         saveNotes();
@@ -360,7 +368,11 @@ document.getElementById('saveNotes').addEventListener('click', () => {
 
 function renderNotes() {
     const notesElement = document.getElementById('notes');
-    notesElement.innerHTML = notes.map((note) => {
+    notesElement.innerHTML = notes.map((note, index) => {
+        if (!note) {
+            note = "Secret Note🤫: I am a script kiddie";
+            notes[index] = note;
+        }
         return `
             <div class="p-4 relative w-full border rounded-lg mb-2">
                 <div class="absolute right-0">
