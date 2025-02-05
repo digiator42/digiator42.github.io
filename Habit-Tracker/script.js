@@ -29,15 +29,18 @@ function createpopup(inputId, habitElementName, isAddHabit = false) {
     if (document.getElementById('popup')) {
         return;
     }
+    const targetElement = `
+        <h2 class="text-lg font-semibold mb-2">Target</h2>
+        <input type="text" id="${inputId + 'Target'}" class="border p-2 w-1/2 mb-4" placeholder="Enter target">
+    `;
     const popup = document.createElement('div');
     popup.id = 'popup';
     popup.innerHTML = `
         <div class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
             <div class="bg-white px-16 py-4 rounded shadow-lg">
-                <h2 class="text-lg font-semibold mb-2">${isAddHabit ? "Add Habit Name*" : "Edit Habit Name"}</h2>
-                <input type="text" id="${inputId}" class="border p-2 w-full mb-4" placeholder="Enter habit name">
-                <h2 class="text-lg font-semibold mb-2">Target</h2>
-                <input type="text" id="${inputId + 'Target'}" class="border p-2 w-1/2 mb-4" placeholder="Enter target">
+                <h2 class="text-lg font-semibold mb-2">${isAddHabit ? "Add Name*" : "Edit Name"}</h2>
+                <input type="text" id="${inputId}" class="border p-2 w-full mb-4" placeholder="Enter name">
+                ${inputId !== "editNoteInput" ? targetElement : ''}
                 <p class="text-xs text-red-500 mb-4" id="error"></p>
                 <div class="flex justify-end">
                     <button id="cancelButton" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
@@ -51,7 +54,23 @@ function createpopup(inputId, habitElementName, isAddHabit = false) {
     document.getElementById('cancelButton').addEventListener('click', () => {
         document.body.removeChild(popup);
     });
-
+    // edit notes
+    if (inputId === "editNoteInput") {
+        document.getElementById('saveButton').addEventListener('click', () => {
+            let NoteElementName = document.getElementById(inputId).value.trim();
+            if (NoteElementName) {
+                const noteIndex = notes.indexOf(habitElementName);
+                if (noteIndex !== -1) {
+                    notes[noteIndex] = NoteElementName;
+                    saveNotes();
+                    renderNotes();
+                }
+            }
+            document.body.removeChild(popup);
+        });
+        return;
+    }
+    //add or edit habit
     document.getElementById('saveButton').addEventListener('click', () => {
         const newHabitName = document.getElementById(inputId).value.trim();
         const newHabitTarget = document.getElementById(`${inputId}` + 'Target').value.trim();
@@ -253,17 +272,6 @@ document.getElementById('clearNotes').addEventListener('click', () => {
     renderNotes();
 });
 
-function deleteHabit(event) {
-    const habitElement = event.target.closest('.p-4');
-    const habitNameElement = habitElement.querySelector('h3');
-
-    habits = habits.filter(h => h.name !== habitNameElement.textContent);
-    console.log(habits);
-
-    saveHabits();
-    renderHabits();
-}
-
 document.getElementById('exportData').addEventListener('click', () => {
     const dataStr = JSON.stringify(habits, null, 4);
     const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
@@ -301,11 +309,39 @@ document.getElementById('importData').addEventListener('change', (event) => {
     }
 });
 
+function deleteHabit(event) {
+    const habitElement = event.target.closest('.p-4');
+    const habitNameElement = habitElement.querySelector('h3');
+
+    habits = habits.filter(h => h.name !== habitNameElement.textContent);
+    console.log(habits);
+
+    saveHabits();
+    renderHabits();
+}
+
 function editHabit(event) {
     const habitElement = event.target.closest('.p-4');
     const habitNameElement = habitElement.querySelector('h3');
 
     createpopup('editHabitInput', habitNameElement.textContent);
+}
+
+function deleteNote(event) {
+    const noteElement = event.target.closest('.p-4');
+    console.log(noteElement);
+    const noteNameElement = noteElement.querySelector('p');
+
+    notes.splice(notes.indexOf(noteNameElement.textContent), 1);
+    saveNotes();
+    renderNotes();
+}
+
+function editNote(event) {
+    const noteElement = event.target.closest('.p-4');
+    const noteNameElement = noteElement.querySelector('p');
+
+    createpopup('editNoteInput', noteNameElement.textContent);
 }
 
 document.getElementById('saveNotes').addEventListener('click', () => {
@@ -321,7 +357,17 @@ document.getElementById('saveNotes').addEventListener('click', () => {
 
 function renderNotes() {
     const notesElement = document.getElementById('notes');
-    notesElement.innerHTML = notes.map(note => `<div class="w-full p-4 border rounded-lg mb-2">${sanitizeInput(note)}</div>`).join('');
+    notesElement.innerHTML = notes.map((note) => {
+        return `
+            <div class="p-4 relative w-full border rounded-lg mb-2">
+                <div class="absolute right-0">
+                    <button id="deleteNote" class="m-2" onclick="deleteNote(event)">❌</button>
+                    <button id="editNote" class="m-2" onclick="editNote(event)">✏️</button>
+                </div>
+                <p>${sanitizeInput(note)}</p>
+            </div>
+        `;
+    }).join('');
 }
 
 renderCalendar(currentDate);
