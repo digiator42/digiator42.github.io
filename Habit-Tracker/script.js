@@ -26,6 +26,9 @@ function sanitizeInput(input) {
         '/': '&#x2F;'
     };
 
+    if (!input || !isNaN(input)) {
+        return;
+    }
     substituted = input.replace(/[&<>"'/]/g, (match) => substitutions[match]);
     return substituted;
 }
@@ -36,7 +39,7 @@ function createpopup(inputId, habitElementName, isAddHabit = false) {
     }
     const targetElement = `
         <h2 class="text-lg font-semibold mb-2">Target</h2>
-        <input type="text" id="${inputId + 'Target'}" class="border p-2 w-1/2 mb-4" placeholder="Enter target">
+        <input type="number" id="${inputId + 'Target'}" class="border p-2 w-1/2 mb-4" placeholder="Enter target">
     `;
     const popup = document.createElement('div');
     popup.id = 'popup';
@@ -75,7 +78,7 @@ function createpopup(inputId, habitElementName, isAddHabit = false) {
         });
         return;
     }
-    //add or edit habit
+    // add or edit habit
     document.getElementById('saveButton').addEventListener('click', () => {
         const newHabitName = document.getElementById(inputId).value.trim();
         const newHabitTarget = document.getElementById(`${inputId}` + 'Target').value.trim();
@@ -159,12 +162,15 @@ function renderHabits() {
     const month = currentDate.getMonth() + 1;
     habitsElement.innerHTML = habits
         .map((habit, index) => {
+            if (!habit.days) {
+                habit.days = {};
+            }
             const habitDays = habit.days[year]?.[month] || [];
             if (!habit.name) {
                 habit.name = randomHabits[Math.floor(Math.random() * randomHabits.length)];
             }
             const sanitizedHabitName = sanitizeInput(habit.name);
-            const target = habit.target || 0;
+            const target = isNaN(habit.target) ? 0 : habit.target;
             return `
                 <div class="p-4 bg-white rounded shadow">
                     <div class="flex relative justify-between items-center mb-4">
