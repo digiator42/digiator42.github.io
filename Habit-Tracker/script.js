@@ -45,18 +45,25 @@ function createpopup(inputId, habitElementName, isAddHabit = false) {
         return;
     }
     const isDark = localStorage.getItem('theme');
-    console.log(isDark);
+    const addEditHabitElement = `
+        <h2 class="text-lg font-semibold mb-2">${isAddHabit ? "Add Name*" : "Edit Name"}</h2>
+        <input type="text" id="${inputId}" class="text-black border p-2 w-full mb-4" placeholder="Enter name">
+    `;
+    const addNoteElement = `
+        <h2 class="text-lg font-semibold mb-2">Edit Note</h2>
+        <textarea id="${inputId}" class="w-64 h-32 p-4 border p-2 text-black"
+            placeholder="Edite note..."></textarea>
+    `;
     const targetElement = `
         <h2 class="text-lg font-semibold mb-2">Target</h2>
-        <input type="number" id="${inputId + 'Target'}" class="border p-2 w-1/2 mb-4 text-black" placeholder="Enter target">
+        <input type="number" id="${inputId + 'Target'}" class="border p-2 w-1/2 mb-4 text-black" placeholder="Target">
     `;
     const popup = document.createElement('div');
     popup.id = 'popup';
     popup.innerHTML = `
         <div class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
             <div class="${isDark ? "bg-gray-800" : "bg-white"} px-16 py-4 rounded shadow-lg">
-                <h2 class="text-lg font-semibold mb-2">${isAddHabit ? "Add Name*" : "Edit Name"}</h2>
-                <input type="text" id="${inputId}" class="text-black border p-2 w-full mb-4" placeholder="Enter name">
+                ${isAddHabit ? addEditHabitElement : inputId !== "editNoteInput" ? addEditHabitElement : addNoteElement}
                 ${inputId !== "editNoteInput" ? targetElement : ''}
                 <p class="text-xs text-red-500 mb-4" id="error"></p>
                 <div class="flex justify-end">
@@ -190,7 +197,6 @@ function renderHabits() {
         const sanitizedHabitName = sanitizeInput(habit.name);
         const target = isNaN(habit.target) || habit.target < 0 ? 0 : habit.target;
         const isDark = localStorage.getItem('theme');
-        console.log(isDark);
         return `
                 <div class="p-4 mt-4 ${isDark ? "bg-gray-800" : "bg-white"} rounded shadow overflow-x-auto">
                     <div class="flex relative justify-between items-center mb-4">
@@ -377,7 +383,7 @@ function deleteNote(event) {
 
 function editNote(event) {
     const noteElement = event.target.closest('.p-4');
-    const noteNameElement = noteElement.querySelector('pre');
+    const noteNameElement = noteElement.querySelector('p');
 
     createpopup('editNoteInput', noteNameElement.textContent);
 }
