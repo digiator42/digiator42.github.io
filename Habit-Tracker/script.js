@@ -170,9 +170,9 @@ function renderHabits() {
                 habit.name = randomHabits[Math.floor(Math.random() * randomHabits.length)];
             }
             const sanitizedHabitName = sanitizeInput(habit.name);
-            const target = isNaN(habit.target) ? 0 : habit.target;
+            const target = isNaN(habit.target) || habit.target < 0 ? 0 : habit.target;
             return `
-                <div class="p-4 bg-white rounded shadow">
+                <div class="p-4 mt-2 bg-white rounded shadow overflow-x-auto">
                     <div class="flex relative justify-between items-center mb-4">
                         <h3 class="font-semibold mb-2">${sanitizedHabitName}</h3>
                         <div class="flex absolute gap-1 left-1/2 transform -translate-x-1/2">
@@ -196,15 +196,15 @@ function renderHabits() {
                             <button id="editHabit" class="m-2" onclick="editHabit(event)">✏️</button>
                         </div>
                     </div>
-                    <div class="grid grid-flow-col justify-between gap-1 max-w-full min-w-0">
+                    <div class="grid grid-flow-col justify-between sm:gap-1 max-w-full min-w-0">
                         ${Array(new Date(year, month, 0).getDate())
                             .fill()
                             .map((_, i) => {
                                 const day = i + 1;
                                 const isChecked = habitDays.includes(day);
                                 return `
-                                    <div class="relative group flex-wrap min-w-0 z-11">
-                                        <input type="checkbox" index="${index}" data-day="${day}" ${isChecked ? 'checked' : ''} class="w-10 h-10 max-w-full min-w-0 mt-0 border-gray-300">
+                                    <div class="relative group flex-wrap sm:min-w-0 z-11">
+                                        <input type="checkbox" index="${index}" data-day="${day}" ${isChecked ? 'checked' : ''} class="w-10 h-10 sm:max-w-full sm:min-w-0 mt-0 border-gray-300">
                                         <div class="absolute bottom-full mb-1 w-10 opacity-0 group-hover:opacity-100 bg-gray-600 text-white text-xs text-center py-1 max-w-full min-w-0 rounded transition-opacity duration-300 z-14">
                                             ${day}
                                         </div>
@@ -357,7 +357,7 @@ function deleteNote(event) {
 
 function editNote(event) {
     const noteElement = event.target.closest('.p-4');
-    const noteNameElement = noteElement.querySelector('p');
+    const noteNameElement = noteElement.querySelector('pre');
 
     createpopup('editNoteInput', noteNameElement.textContent);
 }
@@ -380,12 +380,12 @@ function renderNotes() {
             notes[index] = note;
         }
         return `
-            <div class="p-4 relative w-full border rounded-lg mb-2">
+            <div class="p-4 flex justify-between relative w-full border rounded-lg mb-2">
+                <p class="text-wrap text-left w-4/5">${sanitizeInput(note)}</p>
                 <div class="absolute right-0">
-                    <button id="deleteNote" class="m-2" onclick="deleteNote(event)">❌</button>
-                    <button id="editNote" class="m-2" onclick="editNote(event)">✏️</button>
+                    <button id="deleteNote" class="sm:m-2" onclick="deleteNote(event)">❌</button>
+                    <button id="editNote" class="sm:m-2" onclick="editNote(event)">✏️</button>
                 </div>
-                <p>${sanitizeInput(note)}</p>
             </div>
         `;
     }).join('');
