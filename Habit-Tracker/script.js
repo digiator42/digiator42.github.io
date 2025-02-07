@@ -4,17 +4,27 @@ const habitsElement = document.getElementById('habits');
 const prevMonthButton = document.getElementById('prevMonth');
 const nextMonthButton = document.getElementById('nextMonth');
 const addHabitButton = document.getElementById('addHabit');
-
+const mode = localStorage.getItem('theme');
 const randomHabits = [
     "Get out of bed before noon",
     "Shower at least once a week",
     "Do something instead of nothing",
     "Clean my room once a month",
 ];
-
 let currentDate = new Date();
 let habits = loadHabits();
 let notes = loadNotes();
+
+function toggleTheme() {
+    const isDark = document.body.classList.toggle('dark-mode');
+    if (isDark) {
+        localStorage.setItem('theme', 'dark-mode');
+        renderHabits();
+        return ;
+    }
+    localStorage.removeItem('theme');
+    renderHabits();
+}
 
 function sanitizeInput(input) {
     const substitutions = {
@@ -26,9 +36,6 @@ function sanitizeInput(input) {
         '/': '&#x2F;'
     };
 
-    if (!input || !isNaN(input)) {
-        return;
-    }
     substituted = input.replace(/[&<>"'/]/g, (match) => substitutions[match]);
     return substituted;
 }
@@ -37,17 +44,19 @@ function createpopup(inputId, habitElementName, isAddHabit = false) {
     if (document.getElementById('popup')) {
         return;
     }
+    const isDark = localStorage.getItem('theme');
+    console.log(isDark);
     const targetElement = `
         <h2 class="text-lg font-semibold mb-2">Target</h2>
-        <input type="number" id="${inputId + 'Target'}" class="border p-2 w-1/2 mb-4" placeholder="Enter target">
+        <input type="number" id="${inputId + 'Target'}" class="border p-2 w-1/2 mb-4 text-black" placeholder="Enter target">
     `;
     const popup = document.createElement('div');
     popup.id = 'popup';
     popup.innerHTML = `
         <div class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-            <div class="bg-white px-16 py-4 rounded shadow-lg">
+            <div class="${isDark ? "bg-gray-800" : "bg-white"} px-16 py-4 rounded shadow-lg">
                 <h2 class="text-lg font-semibold mb-2">${isAddHabit ? "Add Name*" : "Edit Name"}</h2>
-                <input type="text" id="${inputId}" class="border p-2 w-full mb-4" placeholder="Enter name">
+                <input type="text" id="${inputId}" class="text-black border p-2 w-full mb-4" placeholder="Enter name">
                 ${inputId !== "editNoteInput" ? targetElement : ''}
                 <p class="text-xs text-red-500 mb-4" id="error"></p>
                 <div class="flex justify-end">
@@ -126,14 +135,24 @@ function saveNotes() {
     localStorage.setItem('notes', JSON.stringify(notes));
 }
 
+function checkData(data) {
+    let validData;
+    try {
+        validData = JSON.parse(data);
+    } catch (error) {
+        return [];
+    }
+    return Array.isArray(validData) ? validData : [];
+}
+
 function loadHabits() {
     const habitsData = localStorage.getItem('habits');
-    return habitsData ? JSON.parse(habitsData) : [];
+    return checkData(habitsData);
 }
 
 function loadNotes() {
     const notesData = localStorage.getItem('notes');
-    return notesData ? JSON.parse(notesData) : [];
+    return checkData(notesData);
 }
 
 function renderCalendar(date) {
@@ -160,35 +179,36 @@ function renderCalendar(date) {
 function renderHabits() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth() + 1;
-    habitsElement.innerHTML = habits
-        .map((habit, index) => {
-            if (!habit.days) {
-                habit.days = {};
-            }
-            const habitDays = habit.days[year]?.[month] || [];
-            if (!habit.name) {
-                habit.name = randomHabits[Math.floor(Math.random() * randomHabits.length)];
-            }
-            const sanitizedHabitName = sanitizeInput(habit.name);
-            const target = isNaN(habit.target) || habit.target < 0 ? 0 : habit.target;
-            return `
-                <div class="p-4 mt-2 bg-white rounded shadow overflow-x-auto">
+    habitsElement.innerHTML = habits.map((habit, index) => {
+        if (!habit.days) {
+            habit.days = {};
+        }
+        const habitDays = habit.days[year]?.[month] || [];
+        if (!habit.name) {
+            habit.name = randomHabits[Math.floor(Math.random() * randomHabits.length)];
+        }
+        const sanitizedHabitName = sanitizeInput(habit.name);
+        const target = isNaN(habit.target) || habit.target < 0 ? 0 : habit.target;
+        const isDark = localStorage.getItem('theme');
+        console.log(isDark);
+        return `
+                <div class="p-4 mt-4 ${isDark ? "bg-gray-800" : "bg-white"} rounded shadow overflow-x-auto">
                     <div class="flex relative justify-between items-center mb-4">
                         <h3 class="font-semibold mb-2">${sanitizedHabitName}</h3>
                         <div class="flex absolute gap-1 left-1/2 transform -translate-x-1/2">
                             <div class="flex flex-col items-center gap-1">
-                                <p id="achievedText" class="text-xm ">Achieved</p>
+                                <p id="achievedText" class="text-xm">Achieved</p>
                                 <div class="flex items-center gap-1">
-                                <p id="achievedTarget" class="text-xm text-gray-600">${habitDays.length >= target ? '✅' : ''}</p>
-                                <p id="achieved" class="text-xm text-gray-600">${habitDays.length}</p>
+                                <p id="achievedTarget" class="text-xm">${habitDays.length >= target ? '✅' : ''}</p>
+                                <p id="achieved" class="text-xm">${habitDays.length}</p>
                                 </div>
                             </div>
                             <div class="flex flex-col items-center mx-3">
                                 <div class="border-l-2 border-gray-500 h-full"></div>
                             </div>
                             <div class="flex flex-col items-center gap-1">
-                                <p id="target" class="text-xm text-gray-600">Target</p>
-                                <p id="target" class="text-xm text-gray-600">${target}</p>
+                                <p id="target" class="text-xm">Target</p>
+                                <p id="target" class="text-xm">${target}</p>
                             </div>
                         </div>
                         <div class="flex justify-between items-center">
@@ -198,24 +218,24 @@ function renderHabits() {
                     </div>
                     <div class="grid grid-flow-col justify-between sm:gap-1 max-w-full min-w-0">
                         ${Array(new Date(year, month, 0).getDate())
-                            .fill()
-                            .map((_, i) => {
-                                const day = i + 1;
-                                const isChecked = habitDays.includes(day);
-                                return `
+                .fill()
+                .map((_, i) => {
+                    const day = i + 1;
+                    const isChecked = habitDays.includes(day);
+                    return `
                                     <div class="relative group flex-wrap sm:min-w-0 z-11">
                                         <input type="checkbox" index="${index}" data-day="${day}" ${isChecked ? 'checked' : ''} class="w-10 h-10 sm:max-w-full sm:min-w-0 mt-0 border-gray-300">
-                                        <div class="absolute bottom-full mb-1 w-10 opacity-0 group-hover:opacity-100 bg-gray-600 text-white text-xs text-center py-1 max-w-full min-w-0 rounded transition-opacity duration-300 z-14">
+                                        <div class="absolute bottom-full w-10 opacity-0 group-hover:opacity-100 bg-gray-600 text-white text-xs text-center py-1 max-w-full min-w-0 rounded transition-opacity duration-300 z-14">
                                             ${day}
                                         </div>
                                     </div>
                                 `;
-                            })
-                            .join('')}
+                })
+                .join('')}
                     </div>
                 </div>
             `;
-        })
+    })
         .join('');
 }
 
@@ -380,9 +400,9 @@ function renderNotes() {
             notes[index] = note;
         }
         return `
-            <div class="p-4 flex justify-between relative w-full border rounded-lg mb-2">
+            <div class="p-4 flex justify-between relative w-full bg-yellow-100 border rounded-lg mb-2 text-black">
                 <p class="text-wrap text-left w-4/5">${sanitizeInput(note)}</p>
-                <div class="absolute right-0">
+                <div class="absolute right-0 top-0">
                     <button id="deleteNote" class="sm:m-2" onclick="deleteNote(event)">❌</button>
                     <button id="editNote" class="sm:m-2" onclick="editNote(event)">✏️</button>
                 </div>
@@ -391,5 +411,6 @@ function renderNotes() {
     }).join('');
 }
 
+document.body.classList.toggle(mode);
 renderCalendar(currentDate);
 renderNotes();
