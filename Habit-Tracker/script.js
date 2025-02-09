@@ -107,7 +107,7 @@ function createpopup(inputId, habitElementName, isAddHabit = false) {
 
         const habitExists = habits.find(h => h.name === newHabitName);
         if (habitExists) {
-            dublicateHabitNameError.innerHTML = 'Habit already exists 🤷‍♂️';
+            errorText.innerHTML = 'Habit already exists 🤷‍♂️';
             return;
         }
 
