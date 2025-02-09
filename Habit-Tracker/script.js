@@ -399,7 +399,7 @@ function deleteNote(event) {
 
 function editNote(event) {
     const noteElement = event.target.closest('.p-4');
-    const noteNameElement = noteElement.querySelector('p');
+    const noteNameElement = noteElement.querySelector('pre');
 
     createpopup('editNoteInput', noteNameElement.textContent);
 }
@@ -423,7 +423,7 @@ function renderNotes() {
         }
         return `
             <div class="p-4 flex justify-between relative w-full bg-yellow-100 border rounded-lg mb-2 text-black">
-                <p class="text-wrap text-left w-4/5">${sanitizeInput(note)}</p>
+                <pre class="break-words whitespace-pre-wrap text-left w-4/5">${sanitizeInput(note)}</pre>
                 <div class="absolute right-0 top-0">
                     <button id="deleteNote" class="sm:m-2" onclick="deleteNote(event)">❌</button>
                     <button id="editNote" class="sm:m-2" onclick="editNote(event)">✏️</button>
