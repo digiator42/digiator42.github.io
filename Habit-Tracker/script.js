@@ -186,6 +186,7 @@ function renderCalendar(date) {
 function renderHabits() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth() + 1;
+    const daysInMonth = new Date(year, month, 0).getDate();
     habitsElement.innerHTML = habits.map((habit, index) => {
         if (!habit.days) {
             habit.days = {};
@@ -195,7 +196,7 @@ function renderHabits() {
             habit.name = randomHabits[Math.floor(Math.random() * randomHabits.length)];
         }
         const sanitizedHabitName = sanitizeInput(habit.name);
-        const target = isNaN(habit.target) || habit.target < 0 ? 0 : habit.target;
+        const target = isNaN(habit.target) || habit.target < 0 ? 0 : parseInt(habit.target);
         const isDark = localStorage.getItem('theme');
         return `
                 <div class="p-4 mt-4 ${isDark ? "bg-gray-800" : "bg-white"} rounded shadow overflow-x-auto">
@@ -223,12 +224,12 @@ function renderHabits() {
                         </div>
                     </div>
                     <div class="grid grid-flow-col justify-between sm:gap-1 max-w-full min-w-0">
-                        ${Array(new Date(year, month, 0).getDate())
-                .fill()
-                .map((_, i) => {
-                    const day = i + 1;
-                    const isChecked = habitDays.includes(day);
-                    return `
+                        ${Array(daysInMonth)
+                            .fill()
+                            .map((_, i) => {
+                                const day = i + 1;
+                                const isChecked = habitDays.includes(day);
+                                return `
                                     <div class="relative group flex-wrap sm:min-w-0 z-11">
                                         <input type="checkbox" index="${index}" data-day="${day}" ${isChecked ? 'checked' : ''} class="w-10 h-10 sm:max-w-full sm:min-w-0 mt-0 border-gray-300">
                                         <div class="absolute bottom-full w-10 opacity-0 group-hover:opacity-100 bg-gray-600 text-white text-xs text-center py-1 max-w-full min-w-0 rounded transition-opacity duration-300 z-14">
@@ -236,15 +237,28 @@ function renderHabits() {
                                         </div>
                                     </div>
                                 `;
-                })
-                .join('')}
+                            })
+                            .join('')}
+                    </div>
+                    <div class="flex justify-between gap-1">
+                        ${Array(12).fill().map((_, i) => {
+                            const month = new Date(0, i).toLocaleString('default', { month: 'short' });
+                            const achieved = habit.days[year]?.[i + 1]?.length || 0;
+                            const daysInMonth = new Date(year, i + 1, 0).getDate();
+                            return `
+                                <div class="flex-1 flex flex-col items-center border px-2 w-full ${achieved >= target ? 'bg-green-400' : ''}">
+                                    <p class="text-sm font-bold">${month}</p>
+                                    <p class="text-sm font-bold">${achieved}/${target}</p>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
                     </div>
                 </div>
             `;
     })
         .join('');
 }
-
 
 function addHabit(name, target) {
     habits.push({ name, days: {}, target });
@@ -258,7 +272,7 @@ function updateHabit(habitIndex, day) {
     const month = currentDate.getMonth() + 1;
 
     if (habit.days[year] === undefined) {
-        habit.days = {};
+        habit.days[year] = {};
     }
     if (!habit.days[year]) {
         habit.days[year] = {};
