@@ -196,7 +196,7 @@ function renderHabits() {
             habit.name = randomHabits[Math.floor(Math.random() * randomHabits.length)];
         }
         const sanitizedHabitName = sanitizeInput(habit.name);
-        const target = isNaN(habit.target) || habit.target < 0 ? 0 : parseInt(habit.target);
+        const target = isNaN(habit.target) || habit.target < 0 ? 1 : parseInt(habit.target);
         const isDark = localStorage.getItem('theme');
         return `
                 <div class="p-4 mt-4 ${isDark ? "bg-gray-800" : "bg-white"} rounded shadow overflow-x-auto">
@@ -248,7 +248,7 @@ function renderHabits() {
                             return `
                                 <div class="flex-1 flex flex-col items-center border px-2 w-full ${achieved >= target ? 'bg-green-400' : ''}">
                                     <p class="text-sm font-bold">${month}</p>
-                                    <p class="text-sm font-bold">${achieved}/${target}</p>
+                                    <p class="text-sm font-bold">${achieved}/${target > daysInMonth ? daysInMonth : target}</p>
                                 </div>
                             `;
                         }).join('')}
