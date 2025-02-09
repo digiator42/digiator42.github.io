@@ -388,7 +388,7 @@ function editHabit(event) {
 
 function deleteNote(event) {
     const noteElement = event.target.closest('.p-4');
-    const noteNameElement = noteElement.querySelector('p');
+    const noteNameElement = noteElement.querySelector('pre');
     const index = notes.indexOf(noteNameElement.textContent);
     if (index !== -1) {
         notes.splice(notes.indexOf(noteNameElement.textContent), 1);
