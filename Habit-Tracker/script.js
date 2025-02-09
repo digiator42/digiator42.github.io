@@ -100,7 +100,7 @@ function createpopup(inputId, habitElementName, isAddHabit = false) {
         const newHabitTarget = document.getElementById(`${inputId}` + 'Target').value.trim();
         errorText = document.getElementById('error');
 
-        if (newHabitName.length > 25) {
+        if (newHabitName.length > 30) {
             errorText.innerHTML = 'Habit name is too long';
             return;
         }
@@ -123,7 +123,7 @@ function createpopup(inputId, habitElementName, isAddHabit = false) {
                 errorText.innerHTML = 'Habit name is required 🤷';
                 return;
             }
-            addHabit(newHabitName, parseInt(newHabitTarget) || 0);
+            addHabit(newHabitName, parseInt(newHabitTarget) || 1);
         } else {
             newHabitName && (habit.name = newHabitName);
             parseInt(newHabitTarget) && (habit.target = newHabitTarget);
@@ -196,7 +196,8 @@ function renderHabits() {
             habit.name = randomHabits[Math.floor(Math.random() * randomHabits.length)];
         }
         const sanitizedHabitName = sanitizeInput(habit.name);
-        const target = isNaN(habit.target) || habit.target < 0 ? 1 : parseInt(habit.target);
+        const target = isNaN(habit.target) || habit.target <= 0 ? 1 : parseInt(habit.target);
+        const maxTarget = target > daysInMonth ? daysInMonth : target;
         const isDark = localStorage.getItem('theme');
         return `
                 <div class="p-4 mt-4 ${isDark ? "bg-gray-800" : "bg-white"} rounded shadow overflow-x-auto">
@@ -206,7 +207,7 @@ function renderHabits() {
                             <div class="flex flex-col items-center gap-1">
                                 <p id="achievedText" class="text-xm">Achieved</p>
                                 <div class="flex items-center gap-1">
-                                <p id="achievedTarget" class="text-xm">${habitDays.length >= target ? '✅' : ''}</p>
+                                <p id="achievedTarget" class="text-xm">${habitDays.length >= maxTarget ? '✅' : ''}</p>
                                 <p id="achieved" class="text-xm">${habitDays.length}</p>
                                 </div>
                             </div>
@@ -215,7 +216,7 @@ function renderHabits() {
                             </div>
                             <div class="flex flex-col items-center gap-1">
                                 <p id="target" class="text-xm">Target</p>
-                                <p id="target" class="text-xm">${target}</p>
+                                <p id="target" class="text-xm">${maxTarget}</p>
                             </div>
                         </div>
                         <div class="flex justify-between items-center">
@@ -245,10 +246,11 @@ function renderHabits() {
                             const month = new Date(0, i).toLocaleString('default', { month: 'short' });
                             const achieved = habit.days[year]?.[i + 1]?.length || 0;
                             const daysInMonth = new Date(year, i + 1, 0).getDate();
+                            const maxTarget = target > daysInMonth ? daysInMonth : target;
                             return `
-                                <div class="flex-1 flex flex-col items-center border px-2 w-full ${achieved >= target ? 'bg-green-400' : ''}">
+                                <div class="flex-1 flex flex-col items-center border px-2 w-full ${achieved >= maxTarget ? 'bg-green-400' : ''}">
                                     <p class="text-sm font-bold">${month}</p>
-                                    <p class="text-sm font-bold">${achieved}/${target > daysInMonth ? daysInMonth : target}</p>
+                                    <p class="text-sm font-bold">${achieved}/${maxTarget}</p>
                                 </div>
                             `;
                         }).join('')}
