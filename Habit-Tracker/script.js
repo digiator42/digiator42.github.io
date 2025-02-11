@@ -123,7 +123,7 @@ function createpopup(inputId, habitElementName, isAddHabit = false) {
                 errorText.innerHTML = 'Habit name is required 🤷';
                 return;
             }
-            addHabit(newHabitName, parseInt(newHabitTarget) || 1);
+            addHabit(newHabitName, parseInt(newHabitTarget) || 0);
         } else {
             newHabitName && (habit.name = newHabitName);
             parseInt(newHabitTarget) && (habit.target = newHabitTarget);
@@ -196,7 +196,7 @@ function renderHabits() {
             habit.name = randomHabits[Math.floor(Math.random() * randomHabits.length)];
         }
         const sanitizedHabitName = sanitizeInput(habit.name);
-        const target = isNaN(habit.target) || habit.target <= 0 ? 1 : parseInt(habit.target);
+        const target = isNaN(habit.target) || habit.target <= 0 ? 0 : parseInt(habit.target);
         const maxTarget = target > daysInMonth ? daysInMonth : target;
         const isDark = localStorage.getItem('theme');
         return `
