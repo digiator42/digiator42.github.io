@@ -100,7 +100,7 @@ function createpopup(inputId, habitElementName, isAddHabit = false) {
         const newHabitTarget = document.getElementById(`${inputId}` + 'Target').value.trim();
         errorText = document.getElementById('error');
 
-        if (newHabitName.length > 30) {
+        if (newHabitName.length > 100) {
             errorText.innerHTML = 'Habit name is too long';
             return;
         }
